@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zovatu Billing Software</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        :root {
+            --primary: #4361ee;
+            --secondary: #3f37c9;
+            --success: #4cc9f0;
+            --dark: #1d3557;
+            --light: #f8f9fa;
+            --danger: #e63946;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f0f2f5;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        /* সাইডবার স্টাইল */
+        .sidebar {
+            width: 250px;
+            background: linear-gradient(180deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 20px 0;
+            box-shadow: 3px 0 10px rgba(0,0,0,0.1);
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+        }
+        
+        .logo {
+            text-align: center;
+            padding: 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .logo h1 {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+        
+        .nav-menu {
+            margin-top: 30px;
+        }
+        
+        .nav-item {
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        
+        .nav-item:hover, .nav-item.active {
+            background: rgba(255,255,255,0.1);
+            border-left: 4px solid var(--success);
+        }
+        
+        .nav-item i {
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+        
+        /* মূল কন্টেন্ট এরিয়া */
+        .main-content {
+            flex: 1;
+            margin-left: 250px;
+            padding: 20px;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .header h2 {
+            color: var(--dark);
+            font-weight: 600;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+        }
+        
+        .user-info img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+            background: var(--success);
+            padding: 8px;
+        }
+        
+        /* কার্ড স্টাইল */
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .card-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+        
+        .bg-primary { background: rgba(67, 97, 238, 0.2); color: var(--primary); }
+        .bg-success { background: rgba(76, 201, 240, 0.2); color: var(--success); }
+        .bg-danger { background: rgba(230, 57, 70, 0.2); color: var(--danger); }
+        
+        .card h3 {
+            font-size: 1.8rem;
+            margin-bottom: 5px;
+        }
+        
+        /* ট্যাব স্টাইল */
+        .tabs {
+            display: flex;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .tab {
+            flex: 1;
+            text-align: center;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+        
+        .tab.active {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        /* ফর্ম স্টাইল */
+        .form-container {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--dark);
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border 0.3s;
+        }
+        
+        .form-control:focus {
+            border-color: var(--primary);
+            outline: none;
+        }
+        
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+        
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+        
+        .btn-block {
+            width: 100%;
+            display: block;
+        }
+        
+        .btn:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+        
+        /* টেবিল স্টাইল */
+        .table-container {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            overflow-x: auto;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        
+        th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: var(--dark);
+        }
+        
+        tr:hover {
+            background: #f8f9fa;
+        }
+        
+        .action-btn {
+            padding: 5px 10px;
+            margin-right: 5px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
+        /* ইনভয়েস প্রিভিউ */
+        .invoice-preview {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .invoice-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .invoice-logo {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+        
+        .invoice-details {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+        }
+        
+        .invoice-table {
+            width: 100%;
+            margin: 30px 0;
+        }
+        
+        .invoice-summary {
+            margin-top: 30px;
+            text-align: right;
+        }
+        
+        .summary-item {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 10px;
+        }
+        
+        .summary-label {
+            width: 150px;
+            font-weight: 500;
+        }
+        
+        .summary-value {
+            width: 150px;
+            text-align: right;
+        }
+        
+        .total {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--primary);
+            border-top: 2px solid #eee;
+            padding-top: 10px;
+        }
+        
+        /* রেস্পন্সিভ ডিজাইন */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 70px;
+            }
+            
+            .sidebar .logo h1, .sidebar .nav-item span {
+                display: none;
+            }
+            
+            .sidebar .nav-item {
+                justify-content: center;
+            }
+            
+            .sidebar .nav-item i {
+                margin-right: 0;
+                font-size: 1.5rem;
+            }
+            
+            .main-content {
+                margin-left: 70px;
+            }
+            
+            .invoice-details {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- সাইডবার -->
+        <div class="sidebar">
+            <div class="logo">
+                <h1><i class="fas fa-calculator"></i> Zovatu</h1>
+            </div>
+            <div class="nav-menu">
+                <div class="nav-item active" data-target="dashboard">
+                    <i class="fas fa-home"></i>
+                    <span>ড্যাশবোর্ড</span>
+                </div>
+                <div class="nav-item" data-target="billing">
+                    <i class="fas fa-file-invoice-dollar"></i>
+                    <span>বিলিং</span>
+                </div>
+                <div class="nav-item" data-target="products">
+                    <i class="fas fa-boxes"></i>
+                    <span>প্রোডাক্ট</span>
+                </div>
+                <div class="nav-item" data-target="customers">
+                    <i class="fas fa-users"></i>
+                    <span>কাস্টমার</span>
+                </div>
+                <div class="nav-item" data-target="reports">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>রিপোর্ট</span>
+                </div>
+                <div class="nav-item" data-target="settings">
+                    <i class="fas fa-cog"></i>
+                    <span>সেটিংস</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- মূল কন্টেন্ট -->
+        <div class="main-content">
+            <div class="header">
+                <h2>ড্যাশবোর্ড</h2>
+                <div class="user-info">
+                    <img src="#" alt="User">
+                    <div>
+                        <h4>আদমিন</h4>
+                        <small>Admin</small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- কার্ড সেকশন -->
+            <div class="cards">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon bg-primary">
+                            <i class="fas fa-shopping-cart"></i>
+                        </div>
+                    </div>
+                    <h3>৳ ২৫,৪২০</h3>
+                    <p>আজকের বিক্রয়</p>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon bg-success">
+                            <i class="fas fa-box"></i>
+                        </div>
+                    </div>
+                    <h3>১৮৭</h3>
+                    <p>প্রোডাক্ট স্টক</p>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon bg-danger">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                    </div>
+                    <h3>১২</h3>
+                    <p>লো স্টক এলার্ট</p>
+                </div>
+            </div>
+
+            <!-- বিলিং সেকশন -->
+            <div class="page-content" id="dashboard-page">
+                <div class="tabs">
+                    <div class="tab active" data-tab="simple">সিম্পল মোড বিলিং</div>
+                    <div class="tab" data-tab="product">প্রোডাক্ট স্ক্যান বিলিং</div>
+                </div>
+
+                <!-- সিম্পল মোড বিলিং -->
+                <div class="tab-content active" id="simple-tab">
+                    <div class="form-container">
+                        <div class="form-group">
+                            <label for="bill-amount">বিলের পরিমাণ (৳)</label>
+                            <input type="number" id="bill-amount" class="form-control" placeholder="মোট বিলের পরিমাণ">
+                        </div>
+                        <div class="form-group">
+                            <label for="received-amount">প্রাপ্ত টাকা (৳)</label>
+                            <input type="number" id="received-amount" class="form-control" placeholder="কাস্টমারের দেওয়া টাকা">
+                        </div>
+                        <div class="form-group">
+                            <label for="return-amount">ফেরত দিতে হবে (৳)</label>
+                            <input type="number" id="return-amount" class="form-control" readonly>
+                        </div>
+                        <button class="btn btn-primary btn-block" id="generate-bill">
+                            <i class="fas fa-file-invoice"></i> বিল তৈরি করুন
+                        </button>
+                    </div>
+                </div>
+
+                <!-- প্রোডাক্ট স্ক্যান বিলিং -->
+                <div class="tab-content" id="product-tab">
+                    <div class="form-container">
+                        <div class="form-group">
+                            <label>প্রোডাক্ট স্ক্যান করুন</label>
+                            <div style="display: flex; gap: 10px;">
+                                <input type="text" id="product-code" class="form-control" placeholder="বারকোড টাইপ করুন">
+                                <button class="btn btn-success" id="scan-btn">
+                                    <i class="fas fa-camera"></i> স্ক্যান করুন
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>প্রোডাক্ট</th>
+                                        <th>দাম (৳)</th>
+                                        <th>পরিমাণ</th>
+                                        <th>মোট (৳)</th>
+                                        <th>অ্যাকশন</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="product-list">
+                                    <tr>
+                                        <td>স্যামসাং গ্যালাক্সি S23</td>
+                                        <td>৮৫,০০০</td>
+                                        <td>1</td>
+                                        <td>৮৫,০০০</td>
+                                        <td>
+                                            <button class="action-btn btn-danger">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>অ্যাপল আইফোন 14</td>
+                                        <td>১,২০,০০০</td>
+                                        <td>1</td>
+                                        <td>১,২০,০০০</td>
+                                        <td>
+                                            <button class="action-btn btn-danger">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="total-amount">মোট বিল (৳)</label>
+                            <input type="number" id="total-amount" class="form-control" value="২০৫,০০০" readonly>
+                        </div>
+                        <button class="btn btn-primary btn-block">
+                            <i class="fas fa-print"></i> প্রিন্ট ও PDF তৈরি করুন
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ইনভয়েস প্রিভিউ (লুকানো) -->
+            <div class="page-content" id="invoice-preview" style="display:none">
+                <div class="invoice-preview" id="invoice-content">
+                    <div class="invoice-header">
+                        <div class="invoice-logo">
+                            <i class="fas fa-calculator"></i>
+                        </div>
+                        <h2>Zovatu Billing Software</h2>
+                        <p>আধুনিক ও সহজ বিলিং সলিউশন</p>
+                    </div>
+                    
+                    <div class="invoice-details">
+                        <div>
+                            <h4>বিল থেকে:</h4>
+                            <p>স্মার্ট শপ</p>
+                            <p>ধানমন্ডি, ঢাকা</p>
+                            <p>ফোন: ০১৭১২-৩৪৫৬৭৮</p>
+                            <p>ইমেইল: info@smartshop.com</p>
+                        </div>
+                        <div>
+                            <h4>ইনভয়েস #: INV-2023-001</h4>
+                            <p>তারিখ: ২৬ জুলাই, ২০২৩</p>
+                            <p>সময়: ০৩:৪৫ PM</p>
+                            <p>বিল করেছেন: আদমিন</p>
+                        </div>
+                    </div>
+                    
+                    <table class="invoice-table">
+                        <thead>
+                            <tr>
+                                <th>প্রোডাক্ট</th>
+                                <th>দাম (৳)</th>
+                                <th>পরিমাণ</th>
+                                <th>মোট (৳)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>স্যামসাং গ্যালাক্সি S23</td>
+                                <td>৮৫,০০০</td>
+                                <td>1</td>
+                                <td>৮৫,০০০</td>
+                            </tr>
+                            <tr>
+                                <td>অ্যাপল আইফোন 14</td>
+                                <td>১,২০,০০০</td>
+                                <td>1</td>
+                                <td>১,২০,০০০</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <div class="invoice-summary">
+                        <div class="summary-item">
+                            <div class="summary-label">সাবটোটাল:</div>
+                            <div class="summary-value">৳ ২,০৫,০০০</div>
+                        </div>
+                        <div class="summary-item">
+                            <div class="summary-label">ডিসকাউন্ট:</div>
+                            <div class="summary-value">৳ ৫,০০০</div>
+                        </div>
+                        <div class="summary-item">
+                            <div class="summary-label">ভ্যাট (৫%):</div>
+                            <div class="summary-value">৳ ১০,০০০</div>
+                        </div>
+                        <div class="summary-item total">
+                            <div class="summary-label">সর্বমোট:</div>
+                            <div class="summary-value">৳ ২,১০,০০০</div>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 40px; text-align: center;">
+                        <p>ধন্যবাদ, আবার আসবেন!</p>
+                        <p>www.zovatu.com | যোগাযোগ: ০৯৬১২-১২১২১২</p>
+                    </div>
+                </div>
+                
+                <div style="text-align: center; margin-top: 30px;">
+                    <button class="btn btn-primary" id="print-invoice">
+                        <i class="fas fa-print"></i> প্রিন্ট করুন
+                    </button>
+                    <button class="btn btn-success" id="download-pdf">
+                        <i class="fas fa-download"></i> PDF ডাউনলোড
+                    </button>
+                    <button class="btn btn-danger" id="back-to-billing">
+                        <i class="fas fa-arrow-left"></i> বিলিং এ ফিরে যান
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // DOM Elements
+        const navItems = document.querySelectorAll('.nav-item');
+        const tabs = document.querySelectorAll('.tab');
+        const tabContents = document.querySelectorAll('.tab-content');
+        const billAmount = document.getElementById('bill-amount');
+        const receivedAmount = document.getElementById('received-amount');
+        const returnAmount = document.getElementById('return-amount');
+        const generateBillBtn = document.getElementById('generate-bill');
+        const invoicePreview = document.getElementById('invoice-preview');
+        const printInvoiceBtn = document.getElementById('print-invoice');
+        const downloadPdfBtn = document.getElementById('download-pdf');
+        const backToBillingBtn = document.getElementById('back-to-billing');
+        
+        // নেভিগেশন মেনু ক্লিক ইভেন্ট
+        navItems.forEach(item => {
+            item.addEventListener('click', function() {
+                navItems.forEach(i => i.classList.remove('active'));
+                this.classList.add('active');
+                
+                const target = this.getAttribute('data-target');
+                document.querySelector('.header h2').textContent = 
+                    this.querySelector('span').textContent;
+            });
+        });
+        
+        // ট্যাব ক্লিক ইভেন্ট
+        tabs.forEach(tab => {
+            tab.addEventListener('click', function() {
+                const tabId = this.getAttribute('data-tab');
+                
+                tabs.forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+                
+                tabContents.forEach(content => {
+                    content.classList.remove('active');
+                    if(content.id === `${tabId}-tab`) {
+                        content.classList.add('active');
+                    }
+                });
+            });
+        });
+        
+        // ফেরত টাকা ক্যালকুলেটর
+        receivedAmount.addEventListener('input', function() {
+            if(billAmount.value && this.value) {
+                const returnVal = parseFloat(this.value) - parseFloat(billAmount.value);
+                returnAmount.value = returnVal > 0 ? returnVal : 0;
+            } else {
+                returnAmount.value = '';
+            }
+        });
+        
+        // বিল জেনারেট ইভেন্ট
+        generateBillBtn.addEventListener('click', function() {
+            if(!billAmount.value || !receivedAmount.value) {
+                alert('অনুগ্রহ করে বিলের পরিমাণ এবং প্রাপ্ত টাকা ইনপুট করুন');
+                return;
+            }
+            
+            invoicePreview.style.display = 'block';
+            document.querySelector('.page-content').style.display = 'none';
+        });
+        
+        // প্রিন্ট ইনভয়েস
+        printInvoiceBtn.addEventListener('click', function() {
+            window.print();
+        });
+        
+        // PDF ডাউনলোড
+        downloadPdfBtn.addEventListener('click', function() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            // HTML কন্টেন্ট কে PDF এ রূপান্তর
+            html2canvas(document.getElementById('invoice-content')).then(canvas => {
+                const imgData = canvas.toDataURL('image/png');
+                const imgWidth = doc.internal.pageSize.getWidth();
+                const imgHeight = (canvas.height * imgWidth) / canvas.width;
+                
+                doc.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
+                doc.save('zovatu-invoice.pdf');
+            });
+        });
+        
+        // বিলিং পেজে ফিরে যান
+        backToBillingBtn.addEventListener('click', function() {
+            invoicePreview.style.display = 'none';
+            document.querySelector('.page-content').style.display = 'block';
+            
+            // ফর্ম রিসেট করুন
+            billAmount.value = '';
+            receivedAmount.value = '';
+            returnAmount.value = '';
+        });
+        
+        // স্ক্যান বাটন ইভেন্ট
+        document.getElementById('scan-btn').addEventListener('click', function() {
+            const productCode = document.getElementById('product-code').value;
+            if(!productCode) {
+                alert('অনুগ্রহ করে প্রোডাক্ট কোড ইনপুট করুন');
+                return;
+            }
+            
+            // এখানে বাস্তবে প্রোডাক্ট ডাটাবেজ থেকে তথ্য নিয়ে আসবে
+            alert(`প্রোডাক্ট স্ক্যান করা হয়েছে: ${productCode}`);
+            document.getElementById('product-code').value = '';
+        });
+        
+        // প্রাথমিক ফাংশন কল
+        document.addEventListener('DOMContentLoaded', function() {
+            // সিমুলেটেড ডেটা
+            if(receivedAmount.value && billAmount.value) {
+                returnAmount.value = receivedAmount.value - billAmount.value;
+            }
+        });
+    </script>
+</body>
+</html>
