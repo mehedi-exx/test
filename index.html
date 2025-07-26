@@ -15,6 +15,7 @@
             --dark: #1d3557;
             --light: #f8f9fa;
             --danger: #e63946;
+            --warning: #f8961e;
         }
         
         * {
@@ -28,11 +29,121 @@
             background-color: #f0f2f5;
             color: #333;
             line-height: 1.6;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
         }
         
-        .container {
-            display: flex;
-            min-height: 100vh;
+        /* লগিন পেজ স্টাইল */
+        .login-container {
+            width: 100%;
+            max-width: 400px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            padding: 30px;
+            text-align: center;
+            animation: fadeIn 0.5s ease-out;
+        }
+        
+        .login-logo {
+            margin-bottom: 25px;
+        }
+        
+        .login-logo i {
+            font-size: 3.5rem;
+            color: var(--primary);
+            background: rgba(67, 97, 238, 0.1);
+            border-radius: 50%;
+            width: 90px;
+            height: 90px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 15px;
+        }
+        
+        .login-logo h1 {
+            font-size: 1.8rem;
+            color: var(--dark);
+            font-weight: 700;
+        }
+        
+        .login-form {
+            margin-top: 25px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--dark);
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 14px 15px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+        
+        .form-control:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+        }
+        
+        .btn {
+            padding: 14px 25px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.3s;
+            width: 100%;
+        }
+        
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            margin-top: 10px;
+        }
+        
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+        
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+        
+        .btn:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+        
+        /* অ্যাপ কন্টেইনার */
+        .app-container {
+            display: none;
+            width: 100%;
+            max-width: 1200px;
+            height: 90vh;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+            overflow: hidden;
         }
         
         /* সাইডবার স্টাইল */
@@ -41,10 +152,9 @@
             background: linear-gradient(180deg, var(--primary), var(--secondary));
             color: white;
             padding: 20px 0;
-            box-shadow: 3px 0 10px rgba(0,0,0,0.1);
-            position: fixed;
-            height: 100vh;
-            overflow-y: auto;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
         }
         
         .logo {
@@ -59,15 +169,17 @@
         }
         
         .nav-menu {
-            margin-top: 30px;
+            margin-top: 20px;
+            flex: 1;
         }
         
         .nav-item {
-            padding: 12px 20px;
+            padding: 14px 20px;
             display: flex;
             align-items: center;
             transition: all 0.3s;
             cursor: pointer;
+            font-size: 1.05rem;
         }
         
         .nav-item:hover, .nav-item.active {
@@ -76,29 +188,54 @@
         }
         
         .nav-item i {
-            margin-right: 10px;
-            font-size: 1.2rem;
+            margin-right: 12px;
+            font-size: 1.3rem;
+            width: 24px;
+            text-align: center;
+        }
+        
+        .logout-btn {
+            margin-top: auto;
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.3s;
+        }
+        
+        .logout-btn:hover {
+            background: rgba(255,255,255,0.1);
+        }
+        
+        .logout-btn i {
+            margin-right: 12px;
+            font-size: 1.3rem;
         }
         
         /* মূল কন্টেন্ট এরিয়া */
         .main-content {
             flex: 1;
-            margin-left: 250px;
-            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            overflow: hidden;
         }
         
         .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 15px 0;
-            margin-bottom: 20px;
-            border-bottom: 1px solid #ddd;
+            padding: 15px 25px;
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            z-index: 10;
         }
         
         .header h2 {
             color: var(--dark);
             font-weight: 600;
+            font-size: 1.6rem;
         }
         
         .user-info {
@@ -115,6 +252,12 @@
             padding: 8px;
         }
         
+        .content-area {
+            flex: 1;
+            padding: 25px;
+            overflow-y: auto;
+        }
+        
         /* কার্ড স্টাইল */
         .cards {
             display: grid;
@@ -129,6 +272,7 @@
             padding: 20px;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
             transition: transform 0.3s;
+            border-left: 4px solid var(--primary);
         }
         
         .card:hover {
@@ -150,15 +294,18 @@
             align-items: center;
             justify-content: center;
             font-size: 1.5rem;
+            background: rgba(67, 97, 238, 0.1);
+            color: var(--primary);
         }
-        
-        .bg-primary { background: rgba(67, 97, 238, 0.2); color: var(--primary); }
-        .bg-success { background: rgba(76, 201, 240, 0.2); color: var(--success); }
-        .bg-danger { background: rgba(230, 57, 70, 0.2); color: var(--danger); }
         
         .card h3 {
             font-size: 1.8rem;
             margin-bottom: 5px;
+            color: var(--dark);
+        }
+        
+        .card p {
+            color: #666;
         }
         
         /* ট্যাব স্টাইল */
@@ -178,6 +325,7 @@
             cursor: pointer;
             transition: all 0.3s;
             font-weight: 500;
+            background: #f8f9fa;
         }
         
         .tab.active {
@@ -213,55 +361,6 @@
             color: var(--dark);
         }
         
-        .form-control {
-            width: 100%;
-            padding: 12px 15px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            font-size: 1rem;
-            transition: border 0.3s;
-        }
-        
-        .form-control:focus {
-            border-color: var(--primary);
-            outline: none;
-        }
-        
-        .btn {
-            padding: 12px 25px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 1rem;
-            font-weight: 500;
-            transition: all 0.3s;
-        }
-        
-        .btn-primary {
-            background: var(--primary);
-            color: white;
-        }
-        
-        .btn-success {
-            background: var(--success);
-            color: white;
-        }
-        
-        .btn-danger {
-            background: var(--danger);
-            color: white;
-        }
-        
-        .btn-block {
-            width: 100%;
-            display: block;
-        }
-        
-        .btn:hover {
-            opacity: 0.9;
-            transform: translateY(-2px);
-        }
-        
         /* টেবিল স্টাইল */
         .table-container {
             background: white;
@@ -294,11 +393,18 @@
         }
         
         .action-btn {
-            padding: 5px 10px;
+            padding: 8px 12px;
             margin-right: 5px;
             border: none;
             border-radius: 5px;
             cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+        
+        .btn-sm {
+            padding: 8px 15px;
+            font-size: 0.9rem;
         }
         
         /* ইনভয়েস প্রিভিউ */
@@ -326,6 +432,8 @@
             display: flex;
             justify-content: space-between;
             margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 20px;
         }
         
         .invoice-table {
@@ -362,37 +470,141 @@
             padding-top: 10px;
         }
         
+        /* নোটিফিকেশন */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            border-radius: 10px;
+            color: white;
+            font-weight: 500;
+            z-index: 1000;
+            transform: translateX(120%);
+            transition: transform 0.4s ease-out;
+            max-width: 350px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .notification.show {
+            transform: translateX(0);
+        }
+        
+        .notification.success {
+            background: var(--success);
+        }
+        
+        .notification.error {
+            background: var(--danger);
+        }
+        
+        .notification.warning {
+            background: var(--warning);
+        }
+        
         /* রেস্পন্সিভ ডিজাইন */
-        @media (max-width: 768px) {
-            .sidebar {
-                width: 70px;
+        @media (max-width: 992px) {
+            .app-container {
+                flex-direction: column;
+                height: 95vh;
             }
             
-            .sidebar .logo h1, .sidebar .nav-item span {
+            .sidebar {
+                width: 100%;
+                height: auto;
+            }
+            
+            .nav-menu {
+                display: flex;
+                overflow-x: auto;
+                padding-bottom: 10px;
+            }
+            
+            .nav-item {
+                flex: 0 0 auto;
+                border-left: 4px solid transparent;
+            }
+            
+            .nav-item span {
+                white-space: nowrap;
+            }
+            
+            .logout-btn {
                 display: none;
             }
-            
-            .sidebar .nav-item {
-                justify-content: center;
+        }
+        
+        @media (max-width: 768px) {
+            .cards {
+                grid-template-columns: 1fr;
             }
             
-            .sidebar .nav-item i {
-                margin-right: 0;
-                font-size: 1.5rem;
-            }
-            
-            .main-content {
-                margin-left: 70px;
+            .tabs {
+                flex-direction: column;
             }
             
             .invoice-details {
                 flex-direction: column;
             }
+            
+            .summary-item {
+                justify-content: space-between;
+            }
+            
+            .summary-label, .summary-value {
+                width: auto;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .login-container {
+                padding: 20px;
+            }
+            
+            .header {
+                padding: 12px 15px;
+            }
+            
+            .content-area {
+                padding: 15px;
+            }
+        }
+        
+        /* অ্যানিমেশন */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
 <body>
-    <div class="container">
+    <!-- লগিন পেজ -->
+    <div class="login-container" id="login-page">
+        <div class="login-logo">
+            <i class="fas fa-calculator"></i>
+            <h1>Zovatu Billing</h1>
+            <p>আধুনিক ও সহজ বিলিং সলিউশন</p>
+        </div>
+        
+        <div class="login-form">
+            <div class="form-group">
+                <label for="username">ইউজারনেম</label>
+                <input type="text" id="username" class="form-control" placeholder="ইউজারনেম দিন">
+            </div>
+            
+            <div class="form-group">
+                <label for="password">পাসওয়ার্ড</label>
+                <input type="password" id="password" class="form-control" placeholder="পাসওয়ার্ড দিন">
+            </div>
+            
+            <button class="btn btn-primary" id="login-btn">
+                <i class="fas fa-sign-in-alt"></i> লগ ইন করুন
+            </button>
+        </div>
+    </div>
+    
+    <!-- মেইন অ্যাপ -->
+    <div class="app-container" id="app">
         <!-- সাইডবার -->
         <div class="sidebar">
             <div class="logo">
@@ -405,24 +617,25 @@
                 </div>
                 <div class="nav-item" data-target="billing">
                     <i class="fas fa-file-invoice-dollar"></i>
-                    <span>বিলিং</span>
+                    <span>বিল জেনারেট</span>
                 </div>
                 <div class="nav-item" data-target="products">
                     <i class="fas fa-boxes"></i>
-                    <span>প্রোডাক্ট</span>
-                </div>
-                <div class="nav-item" data-target="customers">
-                    <i class="fas fa-users"></i>
-                    <span>কাস্টমার</span>
+                    <span>প্রোডাক্ট ম্যানেজ</span>
                 </div>
                 <div class="nav-item" data-target="reports">
                     <i class="fas fa-chart-bar"></i>
-                    <span>রিপোর্ট</span>
+                    <span>রিপোর্টস</span>
                 </div>
-                <div class="nav-item" data-target="settings">
-                    <i class="fas fa-cog"></i>
-                    <span>সেটিংস</span>
+                <div class="nav-item" data-target="backup">
+                    <i class="fas fa-database"></i>
+                    <span>ব্যাকআপ</span>
                 </div>
+            </div>
+            
+            <div class="logout-btn" id="logout-btn">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>লগ আউট</span>
             </div>
         </div>
 
@@ -433,238 +646,398 @@
                 <div class="user-info">
                     <img src="#" alt="User">
                     <div>
-                        <h4>আদমিন</h4>
+                        <h4 id="logged-in-user">আদমিন</h4>
                         <small>Admin</small>
                     </div>
                 </div>
             </div>
-
-            <!-- কার্ড সেকশন -->
-            <div class="cards">
-                <div class="card">
-                    <div class="card-header">
-                        <div class="card-icon bg-primary">
-                            <i class="fas fa-shopping-cart"></i>
+            
+            <div class="content-area">
+                <!-- ড্যাশবোর্ড পেজ -->
+                <div class="page-content active" id="dashboard-page">
+                    <!-- কার্ড সেকশন -->
+                    <div class="cards">
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-icon">
+                                    <i class="fas fa-shopping-cart"></i>
+                                </div>
+                            </div>
+                            <h3>৳ <span id="today-sales">০</span></h3>
+                            <p>আজকের বিক্রয়</p>
+                        </div>
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-icon">
+                                    <i class="fas fa-box"></i>
+                                </div>
+                            </div>
+                            <h3><span id="total-products">০</span></h3>
+                            <p>মোট প্রোডাক্ট</p>
+                        </div>
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-icon">
+                                    <i class="fas fa-money-bill-wave"></i>
+                                </div>
+                            </div>
+                            <h3>৳ <span id="stock-value">০</span></h3>
+                            <p>স্টক ভ্যালু</p>
+                        </div>
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-icon">
+                                    <i class="fas fa-exclamation-triangle"></i>
+                                </div>
+                            </div>
+                            <h3><span id="low-stock">০</span></h3>
+                            <p>লো স্টক এলার্ট</p>
                         </div>
                     </div>
-                    <h3>৳ ২৫,৪২০</h3>
-                    <p>আজকের বিক্রয়</p>
-                </div>
-                <div class="card">
-                    <div class="card-header">
-                        <div class="card-icon bg-success">
-                            <i class="fas fa-box"></i>
-                        </div>
-                    </div>
-                    <h3>১৮৭</h3>
-                    <p>প্রোডাক্ট স্টক</p>
-                </div>
-                <div class="card">
-                    <div class="card-header">
-                        <div class="card-icon bg-danger">
-                            <i class="fas fa-exclamation-triangle"></i>
-                        </div>
-                    </div>
-                    <h3>১২</h3>
-                    <p>লো স্টক এলার্ট</p>
-                </div>
-            </div>
-
-            <!-- বিলিং সেকশন -->
-            <div class="page-content" id="dashboard-page">
-                <div class="tabs">
-                    <div class="tab active" data-tab="simple">সিম্পল মোড বিলিং</div>
-                    <div class="tab" data-tab="product">প্রোডাক্ট স্ক্যান বিলিং</div>
-                </div>
-
-                <!-- সিম্পল মোড বিলিং -->
-                <div class="tab-content active" id="simple-tab">
+                    
+                    <!-- দ্রুত একশন -->
                     <div class="form-container">
-                        <div class="form-group">
-                            <label for="bill-amount">বিলের পরিমাণ (৳)</label>
-                            <input type="number" id="bill-amount" class="form-control" placeholder="মোট বিলের পরিমাণ">
+                        <h3 style="margin-bottom: 20px; color: var(--dark);">দ্রুত একশন</h3>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+                            <button class="btn btn-primary" id="quick-billing">
+                                <i class="fas fa-file-invoice"></i> নতুন বিল তৈরি করুন
+                            </button>
+                            <button class="btn btn-success" id="quick-add">
+                                <i class="fas fa-plus-circle"></i> নতুন প্রোডাক্ট যোগ করুন
+                            </button>
+                            <button class="btn btn-danger" id="quick-backup">
+                                <i class="fas fa-save"></i> এখনই ব্যাকআপ করুন
+                            </button>
                         </div>
-                        <div class="form-group">
-                            <label for="received-amount">প্রাপ্ত টাকা (৳)</label>
-                            <input type="number" id="received-amount" class="form-control" placeholder="কাস্টমারের দেওয়া টাকা">
+                    </div>
+                </div>
+                
+                <!-- বিল জেনারেট পেজ -->
+                <div class="page-content" id="billing-page">
+                    <div class="tabs">
+                        <div class="tab active" data-tab="simple">সিম্পল মোড বিলিং</div>
+                        <div class="tab" data-tab="product">প্রোডাক্ট স্ক্যান বিলিং</div>
+                    </div>
+
+                    <!-- সিম্পল মোড বিলিং -->
+                    <div class="tab-content active" id="simple-tab">
+                        <div class="form-container">
+                            <div class="form-group">
+                                <label for="bill-amount">বিলের পরিমাণ (৳)</label>
+                                <input type="number" id="bill-amount" class="form-control" placeholder="মোট বিলের পরিমাণ">
+                            </div>
+                            <div class="form-group">
+                                <label for="received-amount">প্রাপ্ত টাকা (৳)</label>
+                                <input type="number" id="received-amount" class="form-control" placeholder="কাস্টমারের দেওয়া টাকা">
+                            </div>
+                            <div class="form-group">
+                                <label for="return-amount">ফেরত দিতে হবে (৳)</label>
+                                <input type="number" id="return-amount" class="form-control" readonly>
+                            </div>
+                            <button class="btn btn-primary btn-block" id="generate-bill">
+                                <i class="fas fa-file-invoice"></i> বিল তৈরি করুন
+                            </button>
                         </div>
-                        <div class="form-group">
-                            <label for="return-amount">ফেরত দিতে হবে (৳)</label>
-                            <input type="number" id="return-amount" class="form-control" readonly>
+                    </div>
+
+                    <!-- প্রোডাক্ট স্ক্যান বিলিং -->
+                    <div class="tab-content" id="product-tab">
+                        <div class="form-container">
+                            <div class="form-group">
+                                <label>প্রোডাক্ট স্ক্যান করুন</label>
+                                <div style="display: flex; gap: 10px;">
+                                    <input type="text" id="product-code" class="form-control" placeholder="বারকোড টাইপ করুন">
+                                    <button class="btn btn-success" id="scan-btn">
+                                        <i class="fas fa-camera"></i> স্ক্যান করুন
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="table-container">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>প্রোডাক্ট</th>
+                                            <th>দাম (৳)</th>
+                                            <th>পরিমাণ</th>
+                                            <th>মোট (৳)</th>
+                                            <th>অ্যাকশন</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="product-list">
+                                        <!-- ডাইনামিকভাবে প্রোডাক্ট যোগ হবে -->
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="total-amount">মোট বিল (৳)</label>
+                                <input type="number" id="total-amount" class="form-control" value="০" readonly>
+                            </div>
+                            <button class="btn btn-primary btn-block" id="generate-invoice">
+                                <i class="fas fa-print"></i> প্রিন্ট ও PDF তৈরি করুন
+                            </button>
                         </div>
-                        <button class="btn btn-primary btn-block" id="generate-bill">
-                            <i class="fas fa-file-invoice"></i> বিল তৈরি করুন
+                    </div>
+                </div>
+                
+                <!-- প্রোডাক্ট ম্যানেজমেন্ট পেজ -->
+                <div class="page-content" id="products-page">
+                    <div class="form-container">
+                        <h3 style="margin-bottom: 20px; color: var(--dark);">নতুন প্রোডাক্ট যোগ করুন</h3>
+                        <div class="form-group">
+                            <label for="product-name">প্রোডাক্টের নাম</label>
+                            <input type="text" id="product-name" class="form-control" placeholder="প্রোডাক্টের নাম লিখুন">
+                        </div>
+                        
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                            <div class="form-group">
+                                <label for="product-price">দাম (৳)</label>
+                                <input type="number" id="product-price" class="form-control" placeholder="প্রোডাক্টের দাম">
+                            </div>
+                            <div class="form-group">
+                                <label for="product-stock">স্টক পরিমাণ</label>
+                                <input type="number" id="product-stock" class="form-control" placeholder="স্টক পরিমাণ">
+                            </div>
+                        </div>
+                        
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                            <div class="form-group">
+                                <label for="product-category">ক্যাটাগরি</label>
+                                <select id="product-category" class="form-control">
+                                    <option value="">ক্যাটাগরি নির্বাচন করুন</option>
+                                    <option value="electronics">ইলেকট্রনিক্স</option>
+                                    <option value="clothing">পোশাক</option>
+                                    <option value="groceries">মুদিখানা</option>
+                                    <option value="furniture">ফার্নিচার</option>
+                                    <option value="other">অন্যান্য</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="product-barcode">বারকোড</label>
+                                <input type="text" id="product-barcode" class="form-control" placeholder="স্বয়ংক্রিয়ভাবে তৈরি হবে" readonly>
+                            </div>
+                        </div>
+                        
+                        <button class="btn btn-success btn-block" id="add-product">
+                            <i class="fas fa-plus"></i> প্রোডাক্ট যোগ করুন
                         </button>
                     </div>
-                </div>
-
-                <!-- প্রোডাক্ট স্ক্যান বিলিং -->
-                <div class="tab-content" id="product-tab">
-                    <div class="form-container">
-                        <div class="form-group">
-                            <label>প্রোডাক্ট স্ক্যান করুন</label>
+                    
+                    <div class="table-container">
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 15px;">
+                            <h3 style="color: var(--dark);">সকল প্রোডাক্ট</h3>
                             <div style="display: flex; gap: 10px;">
-                                <input type="text" id="product-code" class="form-control" placeholder="বারকোড টাইপ করুন">
-                                <button class="btn btn-success" id="scan-btn">
-                                    <i class="fas fa-camera"></i> স্ক্যান করুন
+                                <input type="text" id="search-product" class="form-control" placeholder="প্রোডাক্ট খুঁজুন..." style="max-width: 250px;">
+                                <button class="btn btn-sm btn-primary">
+                                    <i class="fas fa-search"></i> সার্চ
                                 </button>
                             </div>
                         </div>
-
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>বারকোড</th>
+                                    <th>প্রোডাক্ট</th>
+                                    <th>ক্যাটাগরি</th>
+                                    <th>দাম (৳)</th>
+                                    <th>স্টক</th>
+                                    <th>অ্যাকশন</th>
+                                </tr>
+                            </thead>
+                            <tbody id="all-products">
+                                <!-- ডাইনামিকভাবে প্রোডাক্ট যোগ হবে -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <!-- রিপোর্টস পেজ -->
+                <div class="page-content" id="reports-page">
+                    <div class="cards">
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-icon">
+                                    <i class="fas fa-chart-line"></i>
+                                </div>
+                                <h3>বিক্রয় রিপোর্ট</h3>
+                            </div>
+                            <div style="height: 200px; display: flex; align-items: center; justify-content: center;">
+                                <canvas id="sales-chart"></canvas>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-icon">
+                                    <i class="fas fa-boxes"></i>
+                                </div>
+                                <h3>স্টক রিপোর্ট</h3>
+                            </div>
+                            <div style="height: 200px; display: flex; align-items: center; justify-content: center;">
+                                <canvas id="stock-chart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-container">
+                        <h3 style="margin-bottom: 20px; color: var(--dark);">লেনদেন রিপোর্ট</h3>
                         <div class="table-container">
                             <table>
                                 <thead>
                                     <tr>
-                                        <th>প্রোডাক্ট</th>
-                                        <th>দাম (৳)</th>
-                                        <th>পরিমাণ</th>
-                                        <th>মোট (৳)</th>
-                                        <th>অ্যাকশন</th>
+                                        <th>তারিখ</th>
+                                        <th>বিল নম্বর</th>
+                                        <th>গ্রাহক</th>
+                                        <th>পরিমাণ (৳)</th>
+                                        <th>স্ট্যাটাস</th>
                                     </tr>
                                 </thead>
-                                <tbody id="product-list">
-                                    <tr>
-                                        <td>স্যামসাং গ্যালাক্সি S23</td>
-                                        <td>৮৫,০০০</td>
-                                        <td>1</td>
-                                        <td>৮৫,০০০</td>
-                                        <td>
-                                            <button class="action-btn btn-danger">
-                                                <i class="fas fa-trash"></i>
-                                            </button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>অ্যাপল আইফোন 14</td>
-                                        <td>১,২০,০০০</td>
-                                        <td>1</td>
-                                        <td>১,২০,০০০</td>
-                                        <td>
-                                            <button class="action-btn btn-danger">
-                                                <i class="fas fa-trash"></i>
-                                            </button>
-                                        </td>
-                                    </tr>
+                                <tbody id="transaction-report">
+                                    <!-- ডাইনামিকভাবে লেনদেন যোগ হবে -->
                                 </tbody>
                             </table>
                         </div>
-
-                        <div class="form-group">
-                            <label for="total-amount">মোট বিল (৳)</label>
-                            <input type="number" id="total-amount" class="form-control" value="২০৫,০০০" readonly>
-                        </div>
-                        <button class="btn btn-primary btn-block">
-                            <i class="fas fa-print"></i> প্রিন্ট ও PDF তৈরি করুন
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- ইনভয়েস প্রিভিউ (লুকানো) -->
-            <div class="page-content" id="invoice-preview" style="display:none">
-                <div class="invoice-preview" id="invoice-content">
-                    <div class="invoice-header">
-                        <div class="invoice-logo">
-                            <i class="fas fa-calculator"></i>
-                        </div>
-                        <h2>Zovatu Billing Software</h2>
-                        <p>আধুনিক ও সহজ বিলিং সলিউশন</p>
-                    </div>
-                    
-                    <div class="invoice-details">
-                        <div>
-                            <h4>বিল থেকে:</h4>
-                            <p>স্মার্ট শপ</p>
-                            <p>ধানমন্ডি, ঢাকা</p>
-                            <p>ফোন: ০১৭১২-৩৪৫৬৭৮</p>
-                            <p>ইমেইল: info@smartshop.com</p>
-                        </div>
-                        <div>
-                            <h4>ইনভয়েস #: INV-2023-001</h4>
-                            <p>তারিখ: ২৬ জুলাই, ২০২৩</p>
-                            <p>সময়: ০৩:৪৫ PM</p>
-                            <p>বিল করেছেন: আদমিন</p>
-                        </div>
-                    </div>
-                    
-                    <table class="invoice-table">
-                        <thead>
-                            <tr>
-                                <th>প্রোডাক্ট</th>
-                                <th>দাম (৳)</th>
-                                <th>পরিমাণ</th>
-                                <th>মোট (৳)</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>স্যামসাং গ্যালাক্সি S23</td>
-                                <td>৮৫,০০০</td>
-                                <td>1</td>
-                                <td>৮৫,০০০</td>
-                            </tr>
-                            <tr>
-                                <td>অ্যাপল আইফোন 14</td>
-                                <td>১,২০,০০০</td>
-                                <td>1</td>
-                                <td>১,২০,০০০</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    
-                    <div class="invoice-summary">
-                        <div class="summary-item">
-                            <div class="summary-label">সাবটোটাল:</div>
-                            <div class="summary-value">৳ ২,০৫,০০০</div>
-                        </div>
-                        <div class="summary-item">
-                            <div class="summary-label">ডিসকাউন্ট:</div>
-                            <div class="summary-value">৳ ৫,০০০</div>
-                        </div>
-                        <div class="summary-item">
-                            <div class="summary-label">ভ্যাট (৫%):</div>
-                            <div class="summary-value">৳ ১০,০০০</div>
-                        </div>
-                        <div class="summary-item total">
-                            <div class="summary-label">সর্বমোট:</div>
-                            <div class="summary-value">৳ ২,১০,০০০</div>
-                        </div>
-                    </div>
-                    
-                    <div style="margin-top: 40px; text-align: center;">
-                        <p>ধন্যবাদ, আবার আসবেন!</p>
-                        <p>www.zovatu.com | যোগাযোগ: ০৯৬১২-১২১২১২</p>
                     </div>
                 </div>
                 
-                <div style="text-align: center; margin-top: 30px;">
-                    <button class="btn btn-primary" id="print-invoice">
-                        <i class="fas fa-print"></i> প্রিন্ট করুন
-                    </button>
-                    <button class="btn btn-success" id="download-pdf">
-                        <i class="fas fa-download"></i> PDF ডাউনলোড
-                    </button>
-                    <button class="btn btn-danger" id="back-to-billing">
-                        <i class="fas fa-arrow-left"></i> বিলিং এ ফিরে যান
-                    </button>
+                <!-- ব্যাকআপ পেজ -->
+                <div class="page-content" id="backup-page">
+                    <div class="form-container">
+                        <h3 style="margin-bottom: 20px; color: var(--dark);">ডেটা ম্যানেজমেন্ট</h3>
+                        
+                        <div class="card" style="margin-bottom: 25px; background: rgba(76, 201, 240, 0.05);">
+                            <div class="card-header">
+                                <i class="fas fa-info-circle" style="color: var(--success); font-size: 1.5rem;"></i>
+                                <h3>স্বয়ংক্রিয় ব্যাকআপ</h3>
+                            </div>
+                            <p>সিস্টেম স্বয়ংক্রিয়ভাবে প্রতি ৬ ঘণ্টা পর পর আপনার সমস্ত ডেটা ব্যাকআপ করবে।</p>
+                            <p style="margin-top: 10px;"><strong>পরবর্তী ব্যাকআপ:</strong> <span id="next-backup">০৬:০০ PM</span></p>
+                        </div>
+                        
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                            <div class="form-group">
+                                <label>ডেটা এক্সপোর্ট করুন</label>
+                                <button class="btn btn-primary btn-block" id="export-data">
+                                    <i class="fas fa-file-export"></i> এক্সপোর্ট করুন
+                                </button>
+                                <small style="display: block; margin-top: 8px;">সমস্ত ডেটা JSON ফরম্যাটে ডাউনলোড হবে</small>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>ডেটা ইমপোর্ট করুন</label>
+                                <input type="file" id="import-file" class="form-control" accept=".json">
+                                <button class="btn btn-success btn-block" id="import-data" style="margin-top: 10px;">
+                                    <i class="fas fa-file-import"></i> ইমপোর্ট করুন
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group" style="margin-top: 25px;">
+                            <label>ব্যাকআপ ইতিহাস</label>
+                            <div class="table-container" style="max-height: 200px; overflow-y: auto;">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>তারিখ</th>
+                                            <th>সময়</th>
+                                            <th>সাইজ</th>
+                                            <th>স্ট্যাটাস</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="backup-history">
+                                        <!-- ব্যাকআপ ইতিহাস যোগ হবে -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+    
+    <!-- নোটিফিকেশন -->
+    <div class="notification" id="notification">
+        <i class="fas fa-check-circle"></i> <span id="notification-text">অপারেশন সফলভাবে সম্পন্ন হয়েছে</span>
+    </div>
 
     <script>
         // DOM Elements
+        const loginPage = document.getElementById('login-page');
+        const appContainer = document.getElementById('app');
+        const loginBtn = document.getElementById('login-btn');
+        const logoutBtn = document.getElementById('logout-btn');
         const navItems = document.querySelectorAll('.nav-item');
+        const pages = document.querySelectorAll('.page-content');
         const tabs = document.querySelectorAll('.tab');
         const tabContents = document.querySelectorAll('.tab-content');
-        const billAmount = document.getElementById('bill-amount');
-        const receivedAmount = document.getElementById('received-amount');
-        const returnAmount = document.getElementById('return-amount');
         const generateBillBtn = document.getElementById('generate-bill');
-        const invoicePreview = document.getElementById('invoice-preview');
-        const printInvoiceBtn = document.getElementById('print-invoice');
-        const downloadPdfBtn = document.getElementById('download-pdf');
-        const backToBillingBtn = document.getElementById('back-to-billing');
+        const generateInvoiceBtn = document.getElementById('generate-invoice');
+        const addProductBtn = document.getElementById('add-product');
+        const exportBtn = document.getElementById('export-data');
+        const importBtn = document.getElementById('import-data');
+        const quickBillingBtn = document.getElementById('quick-billing');
+        const quickAddBtn = document.getElementById('quick-add');
+        const quickBackupBtn = document.getElementById('quick-backup');
+        const notification = document.getElementById('notification');
+        const notificationText = document.getElementById('notification-text');
+        
+        // App State
+        let products = JSON.parse(localStorage.getItem('zovatu_products')) || [];
+        let sales = JSON.parse(localStorage.getItem('zovatu_sales')) || [];
+        let cartItems = [];
+        let currentUser = null;
+        
+        // নোটিফিকেশন দেখান
+        function showNotification(message, type = 'success') {
+            notificationText.textContent = message;
+            notification.className = `notification ${type} show`;
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+        
+        // প্রোডাক্ট বারকোড জেনারেটর
+        function generateBarcode() {
+            return 'BC-' + Math.floor(100000 + Math.random() * 900000);
+        }
+        
+        // লগিন ফাংশন
+        loginBtn.addEventListener('click', function() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            if(!username || !password) {
+                showNotification('ইউজারনেম এবং পাসওয়ার্ড দিন', 'error');
+                return;
+            }
+            
+            // সিমুলেটেড লগিন (বাস্তবে সার্ভার থেকে যাচাই করতে হবে)
+            if(password.length < 4) {
+                showNotification('পাসওয়ার্ড কমপক্ষে ৪ অক্ষরের হতে হবে', 'error');
+                return;
+            }
+            
+            // লগিন সফল
+            currentUser = username;
+            document.getElementById('logged-in-user').textContent = username;
+            loginPage.style.display = 'none';
+            appContainer.style.display = 'flex';
+            showNotification('সফলভাবে লগইন করা হয়েছে');
+            
+            // ড্যাশবোর্ড আপডেট
+            updateDashboard();
+        });
+        
+        // লগআউট ফাংশন
+        logoutBtn.addEventListener('click', function() {
+            appContainer.style.display = 'none';
+            loginPage.style.display = 'block';
+            document.getElementById('username').value = '';
+            document.getElementById('password').value = '';
+            showNotification('সফলভাবে লগআউট করা হয়েছে');
+        });
         
         // নেভিগেশন মেনু ক্লিক ইভেন্ট
         navItems.forEach(item => {
@@ -673,9 +1046,34 @@
                 this.classList.add('active');
                 
                 const target = this.getAttribute('data-target');
-                document.querySelector('.header h2').textContent = 
-                    this.querySelector('span').textContent;
+                pages.forEach(page => {
+                    page.classList.remove('active');
+                    if(page.id === `${target}-page`) {
+                        page.classList.add('active');
+                        document.querySelector('.header h2').textContent = 
+                            this.querySelector('span').textContent;
+                    }
+                });
             });
+        });
+        
+        // দ্রুত একশন বাটন
+        quickBillingBtn.addEventListener('click', function() {
+            navItems.forEach(i => i.classList.remove('active'));
+            document.querySelector('.nav-item[data-target="billing"]').classList.add('active');
+            
+            pages.forEach(page => page.classList.remove('active'));
+            document.getElementById('billing-page').classList.add('active');
+            document.querySelector('.header h2').textContent = 'বিল জেনারেট';
+        });
+        
+        quickAddBtn.addEventListener('click', function() {
+            navItems.forEach(i => i.classList.remove('active'));
+            document.querySelector('.nav-item[data-target="products"]').classList.add('active');
+            
+            pages.forEach(page => page.classList.remove('active'));
+            document.getElementById('products-page').classList.add('active');
+            document.querySelector('.header h2').textContent = 'প্রোডাক্ট ম্যানেজ';
         });
         
         // ট্যাব ক্লিক ইভেন্ট
@@ -696,10 +1094,14 @@
         });
         
         // ফেরত টাকা ক্যালকুলেটর
+        const receivedAmount = document.getElementById('received-amount');
+        const billAmount = document.getElementById('bill-amount');
+        const returnAmount = document.getElementById('return-amount');
+        
         receivedAmount.addEventListener('input', function() {
             if(billAmount.value && this.value) {
                 const returnVal = parseFloat(this.value) - parseFloat(billAmount.value);
-                returnAmount.value = returnVal > 0 ? returnVal : 0;
+                returnAmount.value = returnVal > 0 ? returnVal.toFixed(2) : 0;
             } else {
                 returnAmount.value = '';
             }
@@ -708,66 +1110,274 @@
         // বিল জেনারেট ইভেন্ট
         generateBillBtn.addEventListener('click', function() {
             if(!billAmount.value || !receivedAmount.value) {
-                alert('অনুগ্রহ করে বিলের পরিমাণ এবং প্রাপ্ত টাকা ইনপুট করুন');
+                showNotification('অনুগ্রহ করে বিলের পরিমাণ এবং প্রাপ্ত টাকা ইনপুট করুন', 'error');
                 return;
             }
             
-            invoicePreview.style.display = 'block';
-            document.querySelector('.page-content').style.display = 'none';
-        });
-        
-        // প্রিন্ট ইনভয়েস
-        printInvoiceBtn.addEventListener('click', function() {
-            window.print();
-        });
-        
-        // PDF ডাউনলোড
-        downloadPdfBtn.addEventListener('click', function() {
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF();
+            // সেল রেকর্ড করুন
+            const sale = {
+                id: 'S-' + Date.now(),
+                type: "simple",
+                date: new Date().toISOString(),
+                totalAmount: parseFloat(billAmount.value),
+                receivedAmount: parseFloat(receivedAmount.value),
+                returnAmount: parseFloat(returnAmount.value)
+            };
             
-            // HTML কন্টেন্ট কে PDF এ রূপান্তর
-            html2canvas(document.getElementById('invoice-content')).then(canvas => {
-                const imgData = canvas.toDataURL('image/png');
-                const imgWidth = doc.internal.pageSize.getWidth();
-                const imgHeight = (canvas.height * imgWidth) / canvas.width;
-                
-                doc.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
-                doc.save('zovatu-invoice.pdf');
-            });
-        });
-        
-        // বিলিং পেজে ফিরে যান
-        backToBillingBtn.addEventListener('click', function() {
-            invoicePreview.style.display = 'none';
-            document.querySelector('.page-content').style.display = 'block';
+            sales.push(sale);
+            localStorage.setItem('zovatu_sales', JSON.stringify(sales));
             
             // ফর্ম রিসেট করুন
             billAmount.value = '';
             receivedAmount.value = '';
             returnAmount.value = '';
+            
+            showNotification('সফলভাবে বিল তৈরি করা হয়েছে');
+            updateDashboard();
         });
+        
+        // প্রোডাক্ট যোগ করুন
+        addProductBtn.addEventListener('click', function() {
+            const name = document.getElementById('product-name').value;
+            const price = document.getElementById('product-price').value;
+            const stock = document.getElementById('product-stock').value;
+            const category = document.getElementById('product-category').value;
+            
+            if(!name || !price || !stock || !category) {
+                showNotification('অনুগ্রহ করে সমস্ত তথ্য পূরণ করুন', 'error');
+                return;
+            }
+            
+            // নতুন প্রোডাক্ট তৈরি করুন
+            const newProduct = {
+                id: 'P-' + Date.now(),
+                name: name,
+                price: parseFloat(price),
+                stock: parseInt(stock),
+                category: category,
+                barcode: generateBarcode(),
+                createdAt: new Date().toISOString()
+            };
+            
+            products.push(newProduct);
+            localStorage.setItem('zovatu_products', JSON.stringify(products));
+            
+            // ফর্ম রিসেট করুন
+            document.getElementById('product-name').value = '';
+            document.getElementById('product-price').value = '';
+            document.getElementById('product-stock').value = '';
+            document.getElementById('product-category').value = '';
+            document.getElementById('product-barcode').value = '';
+            
+            showNotification('প্রোডাক্ট সফলভাবে যোগ করা হয়েছে');
+            updateDashboard();
+            renderProducts();
+        });
+        
+        // ড্যাশবোর্ড আপডেট ফাংশন
+        function updateDashboard() {
+            // আজকের বিক্রয়
+            const today = new Date().toISOString().split('T')[0];
+            const todaySales = sales.filter(sale => sale.date.startsWith(today));
+            const totalTodaySales = todaySales.reduce((sum, sale) => sum + sale.totalAmount, 0);
+            document.getElementById('today-sales').textContent = totalTodaySales.toFixed(2);
+            
+            // মোট প্রোডাক্ট
+            document.getElementById('total-products').textContent = products.length;
+            
+            // স্টক ভ্যালু
+            const stockValue = products.reduce((sum, product) => sum + (product.price * product.stock), 0);
+            document.getElementById('stock-value').textContent = stockValue.toFixed(2);
+            
+            // লো স্টক এলার্ট
+            const lowStock = products.filter(product => product.stock < 5).length;
+            document.getElementById('low-stock').textContent = lowStock;
+        }
+        
+        // প্রোডাক্ট তালিকা রেন্ডার
+        function renderProducts() {
+            const productsTable = document.getElementById('all-products');
+            productsTable.innerHTML = '';
+            
+            products.forEach(product => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${product.barcode}</td>
+                    <td>${product.name}</td>
+                    <td>${product.category}</td>
+                    <td>৳ ${product.price.toFixed(2)}</td>
+                    <td>${product.stock}</td>
+                    <td>
+                        <button class="action-btn btn-primary btn-sm">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="action-btn btn-danger btn-sm">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                `;
+                productsTable.appendChild(row);
+            });
+        }
         
         // স্ক্যান বাটন ইভেন্ট
         document.getElementById('scan-btn').addEventListener('click', function() {
             const productCode = document.getElementById('product-code').value;
             if(!productCode) {
-                alert('অনুগ্রহ করে প্রোডাক্ট কোড ইনপুট করুন');
+                showNotification('অনুগ্রহ করে প্রোডাক্ট কোড ইনপুট করুন', 'error');
                 return;
             }
             
-            // এখানে বাস্তবে প্রোডাক্ট ডাটাবেজ থেকে তথ্য নিয়ে আসবে
-            alert(`প্রোডাক্ট স্ক্যান করা হয়েছে: ${productCode}`);
+            // প্রোডাক্ট খুঁজুন
+            const product = products.find(p => p.barcode === productCode);
+            if(!product) {
+                showNotification('প্রোডাক্ট খুঁজে পাওয়া যায়নি', 'error');
+                return;
+            }
+            
+            // কার্টে যোগ করুন
+            const existingItem = cartItems.find(item => item.id === product.id);
+            if(existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cartItems.push({
+                    id: product.id,
+                    name: product.name,
+                    price: product.price,
+                    quantity: 1,
+                    barcode: product.barcode
+                });
+            }
+            
+            // কার্ট আপডেট করুন
+            renderCartItems();
+            
+            showNotification(`${product.name} কার্টে যোগ করা হয়েছে`);
             document.getElementById('product-code').value = '';
         });
         
-        // প্রাথমিক ফাংশন কল
+        // কার্ট আইটেম রেন্ডার
+        function renderCartItems() {
+            const cartTable = document.getElementById('product-list');
+            cartTable.innerHTML = '';
+            
+            let total = 0;
+            
+            cartItems.forEach(item => {
+                const row = document.createElement('tr');
+                const itemTotal = item.price * item.quantity;
+                total += itemTotal;
+                
+                row.innerHTML = `
+                    <td>${item.name}</td>
+                    <td>৳ ${item.price.toFixed(2)}</td>
+                    <td>${item.quantity}</td>
+                    <td>৳ ${itemTotal.toFixed(2)}</td>
+                    <td>
+                        <button class="action-btn btn-danger" data-id="${item.id}">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                `;
+                cartTable.appendChild(row);
+            });
+            
+            document.getElementById('total-amount').value = total.toFixed(2);
+        }
+        
+        // প্রারম্ভিক ফাংশন কল
         document.addEventListener('DOMContentLoaded', function() {
             // সিমুলেটেড ডেটা
-            if(receivedAmount.value && billAmount.value) {
-                returnAmount.value = receivedAmount.value - billAmount.value;
+            if(products.length === 0) {
+                // ডেমো প্রোডাক্ট যোগ করুন
+                products = [
+                    {
+                        id: 'P-1',
+                        name: 'স্যামসাং গ্যালাক্সি S23',
+                        price: 85000,
+                        stock: 12,
+                        category: 'electronics',
+                        barcode: 'BC-123456',
+                        createdAt: new Date().toISOString()
+                    },
+                    {
+                        id: 'P-2',
+                        name: 'অ্যাপল আইফোন 14',
+                        price: 120000,
+                        stock: 8,
+                        category: 'electronics',
+                        barcode: 'BC-654321',
+                        createdAt: new Date().toISOString()
+                    },
+                    {
+                        id: 'P-3',
+                        name: 'সনি হেডফোন',
+                        price: 3500,
+                        stock: 3,
+                        category: 'electronics',
+                        barcode: 'BC-789012',
+                        createdAt: new Date().toISOString()
+                    }
+                ];
+                localStorage.setItem('zovatu_products', JSON.stringify(products));
             }
+            
+            if(sales.length === 0) {
+                // ডেমো বিক্রয় যোগ করুন
+                sales = [
+                    {
+                        id: 'S-1',
+                        type: "simple",
+                        date: new Date().toISOString(),
+                        totalAmount: 2500,
+                        receivedAmount: 3000,
+                        returnAmount: 500
+                    }
+                ];
+                localStorage.setItem('zovatu_sales', JSON.stringify(sales));
+            }
+            
+            // প্রোডাক্ট তালিকা রেন্ডার করুন
+            renderProducts();
+            
+            // ব্যাকআপ ইতিহাস
+            const backupHistory = document.getElementById('backup-history');
+            backupHistory.innerHTML = `
+                <tr>
+                    <td>${new Date().toLocaleDateString()}</td>
+                    <td>${new Date().toLocaleTimeString()}</td>
+                    <td>2.4 KB</td>
+                    <td><span style="color: var(--success);">সফল</span></td>
+                </tr>
+            `;
         });
+        
+        // ড্যাশবোর্ড আপডেট করুন
+        updateDashboard();
+        
+        // পরবর্তী ব্যাকআপ সময় সেট করুন
+        const nextBackupTime = new Date();
+        nextBackupTime.setHours(nextBackupTime.getHours() + 6);
+        document.getElementById('next-backup').textContent = nextBackupTime.toLocaleTimeString();
+        
+        // স্বয়ংক্রিয় ব্যাকআপ (সিমুলেটেড)
+        setInterval(() => {
+            showNotification('ডেটা স্বয়ংক্রিয়ভাবে ব্যাকআপ করা হয়েছে', 'warning');
+            const backupHistory = document.getElementById('backup-history');
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${new Date().toLocaleDateString()}</td>
+                <td>${new Date().toLocaleTimeString()}</td>
+                <td>2.4 KB</td>
+                <td><span style="color: var(--success);">সফল</span></td>
+            `;
+            backupHistory.insertBefore(row, backupHistory.firstChild);
+            
+            // পরবর্তী ব্যাকআপ সময় আপডেট করুন
+            const nextTime = new Date();
+            nextTime.setHours(nextTime.getHours() + 6);
+            document.getElementById('next-backup').textContent = nextTime.toLocaleTimeString();
+        }, 10000); // বাস্তবে 6 ঘন্টা = 21600000 মিলিসেকেন্ড
     </script>
 </body>
 </html>
