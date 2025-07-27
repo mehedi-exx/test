@@ -1,756 +1,543 @@
 <!DOCTYPE html>
-<html lang="bn">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ডিজিটাল বিল জেনারেটর ক্যালকুলেটর</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
+    <title>Modern Calculator</title>
     <style>
-        :root {
-            --primary: #3498db;
-            --secondary: #2ecc71;
-            --dark: #2c3e50;
-            --light: #ecf0f1;
-            --danger: #e74c3c;
-            --warning: #f39c12;
-        }
-        
-        body {
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            min-height: 100vh;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         
-        .navbar-brand {
-            font-weight: 700;
-            color: var(--dark);
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            padding: 20px;
         }
         
-        .card {
-            border-radius: 15px;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-            border: none;
-            margin-bottom: 20px;
+        .calculator-container {
+            display: flex;
+            flex-direction: column;
+            max-width: 900px;
+            width: 100%;
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
         }
         
-        .card-header {
-            background: linear-gradient(to right, var(--primary), var(--secondary));
-            color: white;
-            border-radius: 15px 15px 0 0 !important;
-            font-weight: 600;
-        }
-        
-        .btn-primary {
-            background: var(--primary);
-            border: none;
-        }
-        
-        .btn-success {
-            background: var(--secondary);
-            border: none;
-        }
-        
-        .btn-warning {
-            background: var(--warning);
-            border: none;
-        }
-        
-        .btn-danger {
-            background: var(--danger);
-            border: none;
-        }
-        
-        .tab-content {
-            padding: 20px 0;
-        }
-        
-        .product-item {
-            transition: all 0.3s ease;
-            border-left: 4px solid var(--primary);
-        }
-        
-        .product-item:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            border-left: 4px solid var(--secondary);
-        }
-        
-        .cart-item {
-            border-bottom: 1px dashed #ddd;
-            padding: 10px 0;
-        }
-        
-        .barcode-container {
-            background: white;
-            padding: 10px;
-            border-radius: 8px;
-            margin: 10px 0;
+        .header {
+            padding: 20px;
+            background: rgba(23, 32, 56, 0.9);
             text-align: center;
         }
         
-        .payment-container {
-            background: #f8f9fa;
+        .header h1 {
+            color: #64ffda;
+            font-size: 2.2rem;
+            margin-bottom: 5px;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+        
+        .header p {
+            color: #8892b0;
+            font-size: 1rem;
+        }
+        
+        .main-content {
+            display: flex;
+            padding: 20px;
+            gap: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            .main-content {
+                flex-direction: column;
+            }
+        }
+        
+        .calculator {
+            flex: 1;
+            background: rgba(15, 23, 42, 0.7);
+            border-radius: 15px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .display {
+            background: rgba(23, 32, 56, 0.9);
             border-radius: 10px;
             padding: 20px;
-            border: 1px solid #eee;
+            text-align: right;
+            min-height: 120px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            overflow: hidden;
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3);
         }
         
-        .bill-preview {
-            background: white;
-            padding: 30px;
+        .previous-operation {
+            color: #8892b0;
+            font-size: 1.2rem;
+            min-height: 30px;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+        
+        .current-operation {
+            color: #e6f1ff;
+            font-size: 2.5rem;
+            font-weight: 500;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+        
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+        }
+        
+        button {
+            border: none;
             border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            max-width: 400px;
-            margin: 0 auto;
-            font-family: monospace;
+            padding: 18px 10px;
+            font-size: 1.3rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background: rgba(30, 41, 59, 0.9);
+            color: #e6f1ff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
         
-        .bill-header {
-            text-align: center;
-            border-bottom: 2px dashed #333;
-            padding-bottom: 15px;
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+        }
+        
+        button:active {
+            transform: translateY(1px);
+        }
+        
+        .operator {
+            background: rgba(100, 255, 218, 0.15);
+            color: #64ffda;
+        }
+        
+        .equals {
+            background: rgba(100, 255, 218, 0.3);
+            color: #64ffda;
+            grid-column: span 2;
+        }
+        
+        .clear {
+            background: rgba(255, 90, 90, 0.2);
+            color: #ff5a5a;
+        }
+        
+        .history-panel {
+            flex: 1;
+            background: rgba(15, 23, 42, 0.7);
+            border-radius: 15px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .history-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             margin-bottom: 15px;
         }
         
-        .bill-footer {
-            text-align: center;
-            border-top: 2px dashed #333;
-            padding-top: 15px;
-            margin-top: 15px;
+        .history-header h2 {
+            color: #64ffda;
+            font-size: 1.5rem;
         }
         
-        .bill-item {
+        .history-buttons {
             display: flex;
-            justify-content: space-between;
-            margin: 5px 0;
+            gap: 10px;
         }
         
-        .settings-form .form-group {
-            margin-bottom: 20px;
+        .history-buttons button {
+            padding: 10px 15px;
+            font-size: 0.9rem;
         }
         
-        .barcode-type-btn {
-            margin: 5px;
+        .history-content {
+            flex: 1;
+            overflow-y: auto;
+            max-height: 350px;
+            background: rgba(23, 32, 56, 0.5);
+            border-radius: 10px;
+            padding: 15px;
         }
         
-        @media print {
-            body * {
-                visibility: hidden;
-            }
-            .bill-preview, .bill-preview * {
-                visibility: visible;
-            }
-            .bill-preview {
-                position: absolute;
-                left: 0;
-                top: 0;
-                width: 100%;
-                box-shadow: none;
-            }
+        .history-item {
+            padding: 12px;
+            margin-bottom: 10px;
+            background: rgba(30, 41, 59, 0.7);
+            border-radius: 8px;
+            color: #e6f1ff;
+            border-left: 3px solid #64ffda;
+            transition: transform 0.2s ease;
         }
         
-        .floating-btn {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            z-index: 100;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        .history-item:hover {
+            transform: translateX(5px);
+            background: rgba(30, 41, 59, 0.9);
+        }
+        
+        .history-expression {
+            font-size: 1rem;
+            color: #8892b0;
+        }
+        
+        .history-result {
+            font-size: 1.2rem;
+            font-weight: 500;
+            color: #64ffda;
+            text-align: right;
+        }
+        
+        .empty-history {
+            color: #8892b0;
+            text-align: center;
+            padding: 20px;
+            font-style: italic;
+        }
+        
+        .footer {
+            padding: 15px;
+            text-align: center;
+            color: #8892b0;
+            font-size: 0.9rem;
+            background: rgba(23, 32, 56, 0.9);
+        }
+        
+        .footer a {
+            color: #64ffda;
+            text-decoration: none;
+        }
+        
+        .footer a:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
-        <div class="container">
-            <a class="navbar-brand" href="#">
-                <i class="fas fa-calculator me-2"></i>ডিজিটাল বিল জেনারেটর
-            </a>
-            <div class="d-flex">
-                <span id="currentDateTime" class="me-3 text-muted"></span>
-                <button class="btn btn-sm btn-outline-primary">
-                    <i class="fas fa-user me-1"></i>ক্যাশিয়ার
-                </button>
+    <div class="calculator-container">
+        <div class="header">
+            <h1>Modern Calculator</h1>
+            <p>HTML, CSS & JavaScript | Data saved in Local Storage</p>
+        </div>
+        
+        <div class="main-content">
+            <div class="calculator">
+                <div class="display">
+                    <div class="previous-operation"></div>
+                    <div class="current-operation">0</div>
+                </div>
+                
+                <div class="buttons">
+                    <button class="clear" data-action="clear">C</button>
+                    <button data-action="backspace">⌫</button>
+                    <button class="operator" data-action="/">÷</button>
+                    <button class="operator" data-action="*">×</button>
+                    
+                    <button data-number>7</button>
+                    <button data-number>8</button>
+                    <button data-number>9</button>
+                    <button class="operator" data-action="-">−</button>
+                    
+                    <button data-number>4</button>
+                    <button data-number>5</button>
+                    <button data-number>6</button>
+                    <button class="operator" data-action="+">+</button>
+                    
+                    <button data-number>1</button>
+                    <button data-number>2</button>
+                    <button data-number>3</button>
+                    <button class="operator" data-action=".">.</button>
+                    
+                    <button data-number>0</button>
+                    <button data-action="+/-">±</button>
+                    <button class="equals" data-action="calculate">=</button>
+                </div>
+            </div>
+            
+            <div class="history-panel">
+                <div class="history-header">
+                    <h2>Calculation History</h2>
+                    <div class="history-buttons">
+                        <button data-action="clear-history">Clear</button>
+                        <button data-action="export-history">Export</button>
+                    </div>
+                </div>
+                
+                <div class="history-content">
+                    <div class="empty-history">No calculation history yet</div>
+                </div>
             </div>
         </div>
-    </nav>
-
-    <div class="container my-4">
-        <ul class="nav nav-tabs" id="myTab" role="tablist">
-            <li class="nav-item" role="presentation">
-                <button class="nav-link active" id="sales-tab" data-bs-toggle="tab" data-bs-target="#sales" type="button" role="tab">
-                    <i class="fas fa-shopping-cart me-2"></i>বিক্রয়
-                </button>
-            </li>
-            <li class="nav-item" role="presentation">
-                <button class="nav-link" id="products-tab" data-bs-toggle="tab" data-bs-target="#products" type="button" role="tab">
-                    <i class="fas fa-boxes me-2"></i>পণ্য ব্যবস্থাপনা
-                </button>
-            </li>
-            <li class="nav-item" role="presentation">
-                <button class="nav-link" id="settings-tab" data-bs-toggle="tab" data-bs-target="#settings" type="button" role="tab">
-                    <i class="fas fa-cog me-2"></i>সেটিংস
-                </button>
-            </li>
-        </ul>
         
-        <div class="tab-content" id="myTabContent">
-            <!-- Sales Tab -->
-            <div class="tab-pane fade show active" id="sales" role="tabpanel">
-                <div class="row">
-                    <div class="col-md-8">
-                        <div class="card">
-                            <div class="card-header">
-                                পণ্য তালিকা
-                            </div>
-                            <div class="card-body">
-                                <div class="input-group mb-3">
-                                    <input type="text" id="barcodeInput" class="form-control form-control-lg" placeholder="পণ্যের নাম বা বারকোড লিখুন/স্ক্যান করুন">
-                                    <button class="btn btn-primary" type="button">
-                                        <i class="fas fa-search"></i> খুঁজুন
-                                    </button>
-                                </div>
-                                
-                                <div class="row mt-3" id="productList">
-                                    <div class="col-md-4 mb-3">
-                                        <div class="card product-item">
-                                            <div class="card-body">
-                                                <h5 class="card-title">চাল (৫ কেজি)</h5>
-                                                <p class="card-text">মূল্য: ৳ ৫৫০.০০</p>
-                                                <p class="card-text">বারকোড: 123456789</p>
-                                                <button class="btn btn-sm btn-success add-to-cart">
-                                                    <i class="fas fa-plus"></i> যোগ করুন
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4 mb-3">
-                                        <div class="card product-item">
-                                            <div class="card-body">
-                                                <h5 class="card-title">সয়াবিন তেল (লিটার)</h5>
-                                                <p class="card-text">মূল্য: ৳ ১৮০.০০</p>
-                                                <p class="card-text">বারকোড: 234567891</p>
-                                                <button class="btn btn-sm btn-success add-to-cart">
-                                                    <i class="fas fa-plus"></i> যোগ করুন
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4 mb-3">
-                                        <div class="card product-item">
-                                            <div class="card-body">
-                                                <h5 class="card-title">ডিম (ডজন)</h5>
-                                                <p class="card-text">মূল্য: ৳ ১৪০.০০</p>
-                                                <p class="card-text">বারকোড: 345678912</p>
-                                                <button class="btn btn-sm btn-success add-to-cart">
-                                                    <i class="fas fa-plus"></i> যোগ করুন
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="card mt-3">
-                            <div class="card-header">
-                                বিক্রয় কার্ট
-                            </div>
-                            <div class="card-body">
-                                <div class="table-responsive">
-                                    <table class="table">
-                                        <thead>
-                                            <tr>
-                                                <th>পণ্য</th>
-                                                <th>দাম</th>
-                                                <th>পরিমাণ</th>
-                                                <th>মোট</th>
-                                                <th>অ্যাকশন</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="cartItems">
-                                            <tr class="cart-item">
-                                                <td>চাল (৫ কেজি)</td>
-                                                <td>৳ ৫৫০.০০</td>
-                                                <td>
-                                                    <div class="input-group" style="width: 120px;">
-                                                        <button class="btn btn-sm btn-outline-secondary decrease">-</button>
-                                                        <input type="text" class="form-control text-center" value="1">
-                                                        <button class="btn btn-sm btn-outline-secondary increase">+</button>
-                                                    </div>
-                                                </td>
-                                                <td>৳ ৫৫০.০০</td>
-                                                <td>
-                                                    <button class="btn btn-sm btn-danger">
-                                                        <i class="fas fa-trash"></i>
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                            <tr class="cart-item">
-                                                <td>সয়াবিন তেল (লিটার)</td>
-                                                <td>৳ ১৮০.০০</td>
-                                                <td>
-                                                    <div class="input-group" style="width: 120px;">
-                                                        <button class="btn btn-sm btn-outline-secondary decrease">-</button>
-                                                        <input type="text" class="form-control text-center" value="2">
-                                                        <button class="btn btn-sm btn-outline-secondary increase">+</button>
-                                                    </div>
-                                                </td>
-                                                <td>৳ ৩৬০.০০</td>
-                                                <td>
-                                                    <button class="btn btn-sm btn-danger">
-                                                        <i class="fas fa-trash"></i>
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="col-md-4">
-                        <div class="card">
-                            <div class="card-header">
-                                বিল বিবরণী
-                            </div>
-                            <div class="card-body">
-                                <div class="d-flex justify-content-between mb-2">
-                                    <span>সাবটোটাল:</span>
-                                    <span>৳ ৯১০.০০</span>
-                                </div>
-                                <div class="d-flex justify-content-between mb-2">
-                                    <span>ভ্যাট (৫%):</span>
-                                    <span>৳ ৪৫.৫০</span>
-                                </div>
-                                <div class="d-flex justify-content-between mb-3 fw-bold fs-5">
-                                    <span>মোট:</span>
-                                    <span>৳ ৯৫৫.৫০</span>
-                                </div>
-                                
-                                <div class="payment-container mb-4">
-                                    <div class="mb-3">
-                                        <label class="form-label">প্রাপ্ত টাকা</label>
-                                        <input type="number" class="form-control form-control-lg" value="1000">
-                                    </div>
-                                    <div class="d-flex justify-content-between fw-bold fs-5 text-success">
-                                        <span>পরিবর্তন:</span>
-                                        <span>৳ ৪৪.৫০</span>
-                                    </div>
-                                </div>
-                                
-                                <div class="d-grid gap-2">
-                                    <button class="btn btn-success btn-lg">
-                                        <i class="fas fa-print me-2"></i>বিল প্রিন্ট করুন
-                                    </button>
-                                    <button class="btn btn-primary btn-lg">
-                                        <i class="fas fa-save me-2"></i>বিল সেভ করুন
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="card mt-4">
-                            <div class="card-header">
-                                বিল প্রিভিউ
-                            </div>
-                            <div class="card-body">
-                                <div class="bill-preview">
-                                    <div class="bill-header">
-                                        <h3>আমার দোকান</h3>
-                                        <p>১২৩, বাণিজ্যিক এলাকা, ঢাকা</p>
-                                        <p>ফোন: ০১৭১২-৩৪৫৬৭৮ | ইমেইল: info@amardokan.com</p>
-                                        <p>বিল নং: #INV-2023-001 | তারিখ: ২৭ জুলাই, ২০২৫</p>
-                                    </div>
-                                    
-                                    <div class="bill-items">
-                                        <div class="bill-item">
-                                            <span>চাল (৫ কেজি) x 1</span>
-                                            <span>৳ ৫৫০.০০</span>
-                                        </div>
-                                        <div class="bill-item">
-                                            <span>সয়াবিন তেল (লিটার) x 2</span>
-                                            <span>৳ ৩৬০.০০</span>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="bill-footer">
-                                        <div class="bill-item">
-                                            <span>সাবটোটাল:</span>
-                                            <span>৳ ৯১০.০০</span>
-                                        </div>
-                                        <div class="bill-item">
-                                            <span>ভ্যাট (৫%):</span>
-                                            <span>৳ ৪৫.৫০</span>
-                                        </div>
-                                        <div class="bill-item fw-bold">
-                                            <span>মোট:</span>
-                                            <span>৳ ৯৫৫.৫০</span>
-                                        </div>
-                                        <div class="bill-item">
-                                            <span>প্রাপ্ত:</span>
-                                            <span>৳ ১০০০.০০</span>
-                                        </div>
-                                        <div class="bill-item">
-                                            <span>পরিবর্তন:</span>
-                                            <span>৳ ৪৪.৫০</span>
-                                        </div>
-                                        <p class="mt-3">ধন্যবাদ, আবার আসবেন!</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Products Tab -->
-            <div class="tab-pane fade" id="products" role="tabpanel">
-                <div class="card">
-                    <div class="card-header">
-                        নতুন পণ্য যোগ করুন
-                    </div>
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label class="form-label">পণ্যের নাম</label>
-                                    <input type="text" class="form-control" placeholder="পণ্যের নাম লিখুন">
-                                </div>
-                                <div class="mb-3">
-                                    <label class="form-label">দাম (৳)</label>
-                                    <input type="number" class="form-control" placeholder="পণ্যের দাম লিখুন">
-                                </div>
-                                <div class="mb-3">
-                                    <label class="form-label">ক্যাটাগরি</label>
-                                    <select class="form-select">
-                                        <option selected>ক্যাটাগরি নির্বাচন করুন</option>
-                                        <option>খাদ্যদ্রব্য</option>
-                                        <option>পরিষ্কারক</option>
-                                        <option>কসমেটিক্স</option>
-                                        <option>ইলেকট্রনিক্স</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label class="form-label">বারকোড নম্বর</label>
-                                    <div class="input-group">
-                                        <input type="text" class="form-control" placeholder="বারকোড নম্বর">
-                                        <button class="btn btn-outline-secondary" type="button">
-                                            <i class="fas fa-sync"></i> জেনারেট করুন
-                                        </button>
-                                    </div>
-                                </div>
-                                <div class="mb-3">
-                                    <label class="form-label">বারকোড ফরম্যাট</label>
-                                    <div>
-                                        <button class="btn btn-outline-primary barcode-type-btn active">CODE128</button>
-                                        <button class="btn btn-outline-primary barcode-type-btn">EAN13</button>
-                                        <button class="btn btn-outline-primary barcode-type-btn">UPC</button>
-                                        <button class="btn btn-outline-primary barcode-type-btn">QR</button>
-                                    </div>
-                                </div>
-                                <div class="barcode-container">
-                                    <svg id="barcode"></svg>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="d-grid mt-3">
-                            <button class="btn btn-success btn-lg">
-                                <i class="fas fa-plus-circle me-2"></i> পণ্য সংরক্ষণ করুন
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="card">
-                    <div class="card-header">
-                        পণ্য তালিকা
-                    </div>
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table table-striped">
-                                <thead>
-                                    <tr>
-                                        <th>বারকোড</th>
-                                        <th>পণ্যের নাম</th>
-                                        <th>ক্যাটাগরি</th>
-                                        <th>দাম (৳)</th>
-                                        <th>স্টক</th>
-                                        <th>অ্যাকশন</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>123456789</td>
-                                        <td>চাল (৫ কেজি)</td>
-                                        <td>খাদ্যদ্রব্য</td>
-                                        <td>৫৫০.০০</td>
-                                        <td>২৫</td>
-                                        <td>
-                                            <button class="btn btn-sm btn-primary me-1">
-                                                <i class="fas fa-edit"></i>
-                                            </button>
-                                            <button class="btn btn-sm btn-danger">
-                                                <i class="fas fa-trash"></i>
-                                            </button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>234567891</td>
-                                        <td>সয়াবিন তেল (লিটার)</td>
-                                        <td>খাদ্যদ্রব্য</td>
-                                        <td>১৮০.০০</td>
-                                        <td>৪০</td>
-                                        <td>
-                                            <button class="btn btn-sm btn-primary me-1">
-                                                <i class="fas fa-edit"></i>
-                                            </button>
-                                            <button class="btn btn-sm btn-danger">
-                                                <i class="fas fa-trash"></i>
-                                            </button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>345678912</td>
-                                        <td>ডিম (ডজন)</td>
-                                        <td>খাদ্যদ্রব্য</td>
-                                        <td>১৪০.০০</td>
-                                        <td>৩০</td>
-                                        <td>
-                                            <button class="btn btn-sm btn-primary me-1">
-                                                <i class="fas fa-edit"></i>
-                                            </button>
-                                            <button class="btn btn-sm btn-danger">
-                                                <i class="fas fa-trash"></i>
-                                            </button>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Settings Tab -->
-            <div class="tab-pane fade" id="settings" role="tabpanel">
-                <div class="card">
-                    <div class="card-header">
-                        দোকানের তথ্য
-                    </div>
-                    <div class="card-body">
-                        <div class="settings-form">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label class="form-label">দোকানের নাম</label>
-                                        <input type="text" class="form-control" value="আমার দোকান">
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="form-label">ঠিকানা</label>
-                                        <textarea class="form-control" rows="3">১২৩, বাণিজ্যিক এলাকা, ঢাকা</textarea>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="form-label">ফোন নম্বর</label>
-                                        <input type="text" class="form-control" value="০১৭১২-৩৪৫৬৭৮">
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label class="form-label">ইমেইল</label>
-                                        <input type="email" class="form-control" value="info@amardokan.com">
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="form-label">ট্যাক্স আইডি</label>
-                                        <input type="text" class="form-control" value="TAX-BD-123456">
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="form-label">লোগো</label>
-                                        <input type="file" class="form-control">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="d-grid mt-4">
-                                <button class="btn btn-primary btn-lg">
-                                    <i class="fas fa-save me-2"></i> তথ্য সংরক্ষণ করুন
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="card mt-4">
-                    <div class="card-header">
-                        সিস্টেম সেটিংস
-                    </div>
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label class="form-label">ভ্যাট রেট (%)</label>
-                                    <input type="number" class="form-control" value="5">
-                                </div>
-                                <div class="mb-3">
-                                    <label class="form-label">কারেন্সি</label>
-                                    <select class="form-select">
-                                        <option selected>বাংলাদেশী টাকা (৳)</option>
-                                        <option>ইউএস ডলার ($)</option>
-                                        <option>ইউরো (€)</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label class="form-label">ডাটা ব্যাকআপ</label>
-                                    <div class="d-grid gap-2">
-                                        <button class="btn btn-outline-primary">
-                                            <i class="fas fa-download me-2"></i>ডাটা ডাউনলোড করুন
-                                        </button>
-                                        <button class="btn btn-outline-success">
-                                            <i class="fas fa-upload me-2"></i>ডাটা আপলোড করুন
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <div class="footer">
+            <p>Created with HTML, CSS & JavaScript | Data saved in Local Storage (JSON format) | <a href="#" id="github-link">View on GitHub</a></p>
         </div>
     </div>
-    
-    <a href="#" class="btn btn-primary btn-lg rounded-circle floating-btn">
-        <i class="fas fa-print"></i>
-    </a>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Update current date and time
-        function updateDateTime() {
-            const now = new Date();
-            const options = { 
-                weekday: 'long', 
-                year: 'numeric', 
-                month: 'long', 
-                day: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit'
-            };
-            document.getElementById('currentDateTime').textContent = now.toLocaleDateString('bn-BD', options);
-        }
-        
-        // Initialize barcode
-        function initBarcode() {
-            JsBarcode("#barcode", "123456789", {
-                format: "CODE128",
-                displayValue: true,
-                fontSize: 16,
-                height: 50
-            });
-        }
-        
-        // Initialize barcode type buttons
-        function initBarcodeTypeButtons() {
-            const buttons = document.querySelectorAll('.barcode-type-btn');
-            buttons.forEach(button => {
-                button.addEventListener('click', function() {
-                    buttons.forEach(btn => btn.classList.remove('active'));
-                    this.classList.add('active');
-                });
-            });
-        }
-        
-        // Initialize add to cart buttons
-        function initAddToCartButtons() {
-            const buttons = document.querySelectorAll('.add-to-cart');
-            buttons.forEach(button => {
-                button.addEventListener('click', function() {
-                    const productCard = this.closest('.card');
-                    const productName = productCard.querySelector('.card-title').textContent;
-                    
-                    // Show success notification
-                    const toast = document.createElement('div');
-                    toast.className = 'position-fixed bottom-0 end-0 p-3';
-                    toast.style.zIndex = '11';
-                    toast.innerHTML = `
-                        <div class="toast show" role="alert" aria-live="assertive" aria-atomic="true">
-                            <div class="toast-header bg-success text-white">
-                                <strong class="me-auto">সফল!</strong>
-                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
-                            </div>
-                            <div class="toast-body">
-                                ${productName} কার্টে যোগ করা হয়েছে!
-                            </div>
-                        </div>
-                    `;
-                    document.body.appendChild(toast);
-                    
-                    // Remove toast after 3 seconds
-                    setTimeout(() => {
-                        toast.remove();
-                    }, 3000);
-                });
-            });
-        }
-        
-        // Initialize quantity buttons
-        function initQuantityButtons() {
-            document.querySelectorAll('.increase').forEach(button => {
-                button.addEventListener('click', function() {
-                    const input = this.parentElement.querySelector('input');
-                    input.value = parseInt(input.value) + 1;
-                });
+        document.addEventListener('DOMContentLoaded', () => {
+            // DOM Elements
+            const previousOperandElement = document.querySelector('.previous-operation');
+            const currentOperandElement = document.querySelector('.current-operation');
+            const historyContent = document.querySelector('.history-content');
+            const emptyHistoryElement = document.querySelector('.empty-history');
+            
+            // Calculator state
+            let currentOperand = '0';
+            let previousOperand = '';
+            let operation = null;
+            let shouldResetScreen = false;
+            
+            // Initialize calculator
+            updateDisplay();
+            loadHistory();
+            
+            // Button event listeners
+            document.querySelectorAll('button[data-number]').forEach(button => {
+                button.addEventListener('click', () => appendNumber(button.textContent));
             });
             
-            document.querySelectorAll('.decrease').forEach(button => {
-                button.addEventListener('click', function() {
-                    const input = this.parentElement.querySelector('input');
-                    if (parseInt(input.value) > 1) {
-                        input.value = parseInt(input.value) - 1;
+            document.querySelectorAll('button[data-action]').forEach(button => {
+                button.addEventListener('click', () => {
+                    const action = button.dataset.action;
+                    
+                    if (action === 'clear') {
+                        clearCalculator();
+                    } else if (action === 'backspace') {
+                        deleteNumber();
+                    } else if (action === '+/-') {
+                        invertNumber();
+                    } else if (action === '.') {
+                        appendDecimal();
+                    } else if (action === 'calculate') {
+                        calculate();
+                    } else {
+                        chooseOperation(action);
                     }
                 });
             });
-        }
-        
-        // Initialize the application
-        document.addEventListener('DOMContentLoaded', function() {
-            updateDateTime();
-            setInterval(updateDateTime, 60000); // Update every minute
             
-            initBarcode();
-            initBarcodeTypeButtons();
-            initAddToCartButtons();
-            initQuantityButtons();
-            
-            // Add event listener for barcode input
-            document.getElementById('barcodeInput').addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') {
-                    this.value = '';
-                    const toast = document.createElement('div');
-                    toast.className = 'position-fixed bottom-0 end-0 p-3';
-                    toast.style.zIndex = '11';
-                    toast.innerHTML = `
-                        <div class="toast show" role="alert" aria-live="assertive" aria-atomic="true">
-                            <div class="toast-header bg-info text-white">
-                                <strong class="me-auto">স্ক্যান সফল!</strong>
-                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
-                            </div>
-                            <div class="toast-body">
-                                পণ্যটি কার্টে যোগ করা হয়েছে!
-                            </div>
-                        </div>
-                    `;
-                    document.body.appendChild(toast);
-                    
-                    // Remove toast after 3 seconds
-                    setTimeout(() => {
-                        toast.remove();
-                    }, 3000);
-                }
+            // History buttons
+            document.querySelector('[data-action="clear-history"]').addEventListener('click', clearHistory);
+            document.querySelector('[data-action="export-history"]').addEventListener('click', exportHistory);
+            document.querySelector('#github-link').addEventListener('click', (e) => {
+                e.preventDefault();
+                alert('GitHub repository would open here in a real implementation');
             });
+            
+            // Calculator functions
+            function appendNumber(number) {
+                if (currentOperand === '0' || shouldResetScreen) {
+                    currentOperand = number;
+                    shouldResetScreen = false;
+                } else {
+                    currentOperand += number;
+                }
+                updateDisplay();
+            }
+            
+            function appendDecimal() {
+                if (shouldResetScreen) {
+                    currentOperand = '0.';
+                    shouldResetScreen = false;
+                    return;
+                }
+                
+                if (!currentOperand.includes('.')) {
+                    currentOperand += '.';
+                }
+                updateDisplay();
+            }
+            
+            function deleteNumber() {
+                if (currentOperand.length === 1 || (currentOperand.length === 2 && currentOperand.startsWith('-'))) {
+                    currentOperand = '0';
+                } else {
+                    currentOperand = currentOperand.slice(0, -1);
+                }
+                updateDisplay();
+            }
+            
+            function invertNumber() {
+                if (currentOperand === '0') return;
+                
+                if (currentOperand.startsWith('-')) {
+                    currentOperand = currentOperand.slice(1);
+                } else {
+                    currentOperand = '-' + currentOperand;
+                }
+                updateDisplay();
+            }
+            
+            function clearCalculator() {
+                currentOperand = '0';
+                previousOperand = '';
+                operation = null;
+                shouldResetScreen = false;
+                updateDisplay();
+            }
+            
+            function chooseOperation(op) {
+                if (currentOperand === '0') return;
+                
+                if (previousOperand !== '') {
+                    calculate();
+                }
+                
+                operation = op;
+                previousOperand = currentOperand;
+                shouldResetScreen = true;
+                updateDisplay();
+            }
+            
+            function calculate() {
+                if (operation === null || shouldResetScreen) return;
+                
+                const prev = parseFloat(previousOperand);
+                const current = parseFloat(currentOperand);
+                let result;
+                
+                switch (operation) {
+                    case '+':
+                        result = prev + current;
+                        break;
+                    case '-':
+                        result = prev - current;
+                        break;
+                    case '*':
+                        result = prev * current;
+                        break;
+                    case '/':
+                        if (current === 0) {
+                            alert("Cannot divide by zero!");
+                            return;
+                        }
+                        result = prev / current;
+                        break;
+                    default:
+                        return;
+                }
+                
+                // Create history item
+                const historyItem = {
+                    expression: `${previousOperand} ${operation} ${currentOperand}`,
+                    result: result
+                };
+                
+                // Save to history
+                saveToHistory(historyItem);
+                
+                // Update calculator state
+                currentOperand = result.toString();
+                operation = null;
+                previousOperand = '';
+                shouldResetScreen = true;
+                
+                updateDisplay();
+            }
+            
+            function updateDisplay() {
+                currentOperandElement.textContent = currentOperand;
+                
+                if (operation !== null) {
+                    previousOperandElement.textContent = `${previousOperand} ${operation}`;
+                } else {
+                    previousOperandElement.textContent = previousOperand;
+                }
+            }
+            
+            // History functions
+            function saveToHistory(item) {
+                let history = JSON.parse(localStorage.getItem('calculatorHistory') || [];
+                history.unshift(item);
+                
+                // Keep only the last 20 items
+                if (history.length > 20) {
+                    history = history.slice(0, 20);
+                }
+                
+                localStorage.setItem('calculatorHistory', JSON.stringify(history));
+                loadHistory();
+            }
+            
+            function loadHistory() {
+                const history = JSON.parse(localStorage.getItem('calculatorHistory')) || [];
+                
+                if (history.length === 0) {
+                    emptyHistoryElement.style.display = 'block';
+                    historyContent.innerHTML = '<div class="empty-history">No calculation history yet</div>';
+                    return;
+                }
+                
+                emptyHistoryElement.style.display = 'none';
+                historyContent.innerHTML = '';
+                
+                history.forEach(item => {
+                    const historyItem = document.createElement('div');
+                    historyItem.className = 'history-item';
+                    historyItem.innerHTML = `
+                        <div class="history-expression">${item.expression}</div>
+                        <div class="history-result">= ${item.result}</div>
+                    `;
+                    historyContent.appendChild(historyItem);
+                });
+            }
+            
+            function clearHistory() {
+                if (confirm('Are you sure you want to clear all history?')) {
+                    localStorage.removeItem('calculatorHistory');
+                    loadHistory();
+                }
+            }
+            
+            function exportHistory() {
+                const history = JSON.parse(localStorage.getItem('calculatorHistory')) || [];
+                
+                if (history.length === 0) {
+                    alert('No history to export');
+                    return;
+                }
+                
+                const dataStr = JSON.stringify(history, null, 2);
+                const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+                
+                const exportFileDefaultName = 'calculator-history.json';
+                
+                const linkElement = document.createElement('a');
+                linkElement.setAttribute('href', dataUri);
+                linkElement.setAttribute('download', exportFileDefaultName);
+                document.body.appendChild(linkElement);
+                linkElement.click();
+                document.body.removeChild(linkElement);
+            }
         });
     </script>
 </body>
