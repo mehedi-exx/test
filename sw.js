@@ -1,10 +1,10 @@
-const CACHE_NAME = 'pos-v01-cache';
+const CACHE_NAME = 'pos-v02-cache';
 const ASSETS_TO_CACHE = [
   '/',
   '/index.html',
-  '/assets/css/style.css',
-  '/assets/js/app.js',
-  '/manifest.json'
+  '/manifest.json',
+  '/icon-192.png',
+  '/icon-512.png'
 ];
 
 self.addEventListener('install', event => {
