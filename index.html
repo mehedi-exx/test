@@ -900,6 +900,20 @@
         .fade-in {
             animation: fadeIn 0.5s ease forwards;
         }
+        
+        /* Password Field */
+        .password-container {
+            position: relative;
+        }
+        
+        .toggle-password {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: var(--gray);
+        }
     </style>
 </head>
 <body>
@@ -916,12 +930,15 @@
             <div class="login-body">
                 <div class="form-group">
                     <label class="form-label">ব্যবহারকারীর নাম</label>
-                    <input type="text" class="form-control" placeholder="আপনার ব্যবহারকারীর নাম লিখুন">
+                    <input type="text" id="username" class="form-control" placeholder="আপনার ব্যবহারকারীর নাম লিখুন">
                 </div>
                 
                 <div class="form-group">
                     <label class="form-label">পাসওয়ার্ড</label>
-                    <input type="password" class="form-control" placeholder="আপনার পাসওয়ার্ড লিখুন">
+                    <div class="password-container">
+                        <input type="password" id="password" class="form-control" placeholder="আপনার পাসওয়ার্ড লিখুন">
+                        <i class="fas fa-eye toggle-password" id="togglePassword"></i>
+                    </div>
                 </div>
                 
                 <div class="switch-container">
@@ -936,6 +953,12 @@
                 <button class="btn btn-success" style="width: 100%; padding: 16px; font-size: 18px;" id="loginBtn">
                     <i class="fas fa-sign-in-alt"></i> সিস্টেমে প্রবেশ করুন
                 </button>
+                
+                <div style="text-align: center; margin-top: 20px; color: var(--gray);">
+                    ডেমো অ্যাকাউন্ট: <br>
+                    এডমিন - ব্যবহারকারী: admin, পাসওয়ার্ড: admin123 <br>
+                    সেলসম্যান - ব্যবহারকারী: salesman, পাসওয়ার্ড: sales123
+                </div>
             </div>
             <div class="login-footer">
                 পূর্ণাঙ্গ POS সিস্টেম v2.0 | সকল অধিকার সংরক্ষিত &copy; 2023
@@ -985,11 +1008,11 @@
                     <i class="fas fa-chart-bar"></i>
                     <span>রিপোর্ট</span>
                 </div>
-                <div class="nav-item" data-tab="users">
+                <div class="nav-item admin-only" data-tab="users">
                     <i class="fas fa-user-cog"></i>
                     <span>ব্যবহারকারী ব্যবস্থাপনা</span>
                 </div>
-                <div class="nav-item" data-tab="settings">
+                <div class="nav-item admin-only" data-tab="settings">
                     <i class="fas fa-cog"></i>
                     <span>সেটিংস</span>
                 </div>
@@ -1180,10 +1203,10 @@
                     <div id="products" class="tab-content active">
                         <div class="search-bar" style="margin-bottom: 20px; width: 100%;">
                             <i class="fas fa-search"></i>
-                            <input type="text" placeholder="প্রোডাক্ট খুঁজুন বা বারকোড স্ক্যান করুন...">
+                            <input type="text" id="productSearch" placeholder="প্রোডাক্ট খুঁজুন বা বারকোড স্ক্যান করুন...">
                         </div>
                         
-                        <div class="products-grid">
+                        <div class="products-grid" id="productsGrid">
                             <!-- Products will be loaded dynamically -->
                         </div>
                     </div>
@@ -1371,11 +1394,7 @@
         ];
         
         // Sample cart items
-        let cart = [
-            { id: 1, name: "পুরুষদের টি-শার্ট", price: 450, quantity: 2, icon: "fa-tshirt" },
-            { id: 4, name: "হেডফোন", price: 1200, quantity: 1, icon: "fa-headphones" },
-            { id: 5, name: "স্পোর্টস জুতো", price: 2500, quantity: 1, icon: "fa-shoe-prints" }
-        ];
+        let cart = [];
         
         // DOM Elements
         const loginScreen = document.getElementById('loginScreen');
@@ -1397,6 +1416,10 @@
         const checkoutBtn = document.getElementById('checkoutBtn');
         const toggleSidebar = document.querySelector('.toggle-sidebar');
         const sidebar = document.querySelector('.sidebar');
+        const usernameInput = document.getElementById('username');
+        const passwordInput = document.getElementById('password');
+        const togglePassword = document.getElementById('togglePassword');
+        const productSearch = document.getElementById('productSearch');
         
         // Initialize the application
         function initApp() {
@@ -1416,6 +1439,11 @@
             userRole.textContent = role;
             userInitial.textContent = initial;
             topUserName.textContent = name;
+            
+            // Show/hide admin features
+            document.querySelectorAll('.admin-only').forEach(item => {
+                item.style.display = isAdmin ? 'flex' : 'none';
+            });
             
             // Setup event listeners
             setupEventListeners();
@@ -1562,15 +1590,37 @@
         function setupEventListeners() {
             // Login button
             loginBtn.addEventListener('click', function() {
-                loginScreen.style.display = 'none';
-                appContainer.style.display = 'flex';
-                initApp();
+                const username = usernameInput.value;
+                const password = passwordInput.value;
+                const isAdmin = roleSwitch.checked;
+                
+                // Simple authentication
+                if (isAdmin) {
+                    if (username === "admin" && password === "admin123") {
+                        loginScreen.style.display = 'none';
+                        appContainer.style.display = 'flex';
+                        initApp();
+                    } else {
+                        alert("ভুল এডমিন ব্যবহারকারীর নাম বা পাসওয়ার্ড!");
+                    }
+                } else {
+                    if (username === "salesman" && password === "sales123") {
+                        loginScreen.style.display = 'none';
+                        appContainer.style.display = 'flex';
+                        initApp();
+                    } else {
+                        alert("ভুল সেলসম্যান ব্যবহারকারীর নাম বা পাসওয়ার্ড!");
+                    }
+                }
             });
             
             // Logout button
             logoutBtn.addEventListener('click', function() {
                 appContainer.style.display = 'none';
                 loginScreen.style.display = 'flex';
+                // Clear inputs
+                usernameInput.value = '';
+                passwordInput.value = '';
             });
             
             // Clear cart button
@@ -1639,6 +1689,59 @@
                     // Show selected sub-tab content
                     const subtabId = this.getAttribute('data-subtab');
                     document.getElementById(subtabId).classList.add('active');
+                });
+            });
+            
+            // Toggle password visibility
+            togglePassword.addEventListener('click', function() {
+                const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordInput.setAttribute('type', type);
+                this.classList.toggle('fa-eye');
+                this.classList.toggle('fa-eye-slash');
+            });
+            
+            // Product search
+            productSearch.addEventListener('input', function() {
+                const searchTerm = this.value.toLowerCase();
+                const filteredProducts = products.filter(product => 
+                    product.name.toLowerCase().includes(searchTerm) || 
+                    product.category.toLowerCase().includes(searchTerm)
+                );
+                
+                // Re-render products grid
+                productsGrid.innerHTML = '';
+                
+                filteredProducts.forEach(product => {
+                    const productEl = document.createElement('div');
+                    productEl.className = 'product-card';
+                    productEl.innerHTML = `
+                        <div class="product-image">
+                            <i class="fas ${product.icon}"></i>
+                        </div>
+                        <div class="product-info">
+                            <div class="product-name">${product.name}</div>
+                            <div class="product-price">৳ ${product.price.toLocaleString()}</div>
+                            <div class="product-stock">
+                                <i class="fas fa-box"></i> স্টক: ${product.stock}
+                                <div class="stock-bar">
+                                    <div class="stock-level" style="width: ${(product.stock/50)*100}%"></div>
+                                </div>
+                            </div>
+                            <button class="btn btn-success" style="width: 100%; margin-top: 15px;" data-id="${product.id}">
+                                <i class="fas fa-plus"></i> কার্টে যোগ করুন
+                            </button>
+                        </div>
+                    `;
+                    
+                    productsGrid.appendChild(productEl);
+                });
+                
+                // Re-attach event listeners
+                document.querySelectorAll('#products .btn-success').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const productId = parseInt(this.getAttribute('data-id'));
+                        addToCart(productId);
+                    });
                 });
             });
         }
